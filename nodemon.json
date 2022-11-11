@@ -1,9 +1,0 @@
-{
-    "ignore": [".git", "node_modules/**/node_modules", "commands/*", "*.json"],
-    "execMap": {
-        "js": "node --trace-warnings"
-    },
-    "events": {
-        "restart": "cls"
-    }
-}

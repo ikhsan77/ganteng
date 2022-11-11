@@ -14,12 +14,14 @@
         "@adiwajshing/baileys": "^4.4.0",
         "@adiwajshing/keyed-db": "^0.2.4",
         "axios": "^0.27.2",
+        "caliph-api": "github:caliphdev/caliph-api",
         "chalk": "^4.1.2",
         "dotenv": "^16.0.1",
         "form-data": "^4.0.0",
         "glob": "^8.0.3",
         "i18n": "^0.15.1",
         "knex": "^2.2.0",
+        "kotz-api": "^1.0.0",
         "lolhuman-api": "^1.0.3",
         "module-alias": "^2.2.2",
         "moment-timezone": "^0.5.34",
@@ -30,6 +32,7 @@
         "sqlite3": "^5.1.2",
         "uuid": "^9.0.0",
         "winston": "^3.8.2",
+        "xfarr-api": "^2.0.0",
         "youtubei": "^0.0.1-rc.36"
     },
     "_moduleAliases": {

@@ -1,5 +1,5 @@
 {
-    "wait": "Harap tunggu...",
+    "wait": "*SEDANG DIPROSES!*\n\n• beri jeda maks 4 detik\n• jika gagal silahkan ulangi\n• jika error tolong hubungi #creator\n\n• Ingin bisa akses semua fitur dan juga add bot kegrup kamu? Cek info di #premium",
     "message": {
         "limit_run_out": "Limit Anda sudah habis.",
         "owner_only": "Maaf, command ini hanya untuk owner.",
@@ -14,7 +14,7 @@
     },
     "game": {
         "finish_last_first": "Harap selesaikan game sebelumnya terlebih dahulu.",
-        "right_answer": "Benar! Anda mendapat {{xp}} XP!",
+        "right_answer": "Benar!\n+{{xp}} XP!",
         "timeout_answer": "Waktu habis, jawabannya adalah : {{answer}}."
     },
     "sticker": {

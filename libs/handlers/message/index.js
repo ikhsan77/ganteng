@@ -95,10 +95,10 @@ module.exports = async (client, { messages, type }) => {
         }
 
         if (getCommand.minArgs && getCommand.minArgs > args.length) {
-            var text = `*Minimal argument is ${getCommand.minArgs}*\n`
+            var text = `*Minimal argument adalah ${getCommand.minArgs}*\n\n`
             if (getCommand.expectedArgs) {
-                text += `*Argument :* ${getCommand.expectedArgs}\n`
                 text += `*Usage :* {prefix}{command} {argument}\n`
+                text += `*Argument :* ${getCommand.expectedArgs}\n`
             }
             if (getCommand.example) {
                 text += `*Example :* ${getCommand.example}`

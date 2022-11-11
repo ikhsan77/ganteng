@@ -5,21 +5,15 @@ const config = require('@config')
  * @type { ICommand }
  */
 module.exports = {
-    category: 'about',
+    category: 'About',
     description: 'Show owner this bot.',
-    callback: async ({ msg, client }) => {
-        const vcard =
-            'BEGIN:VCARD\n' + // metadata of the contact card
-            'VERSION:3.0\n' +
-            `FN:${config.ownerName}\n` + // full name
-            `ORG:Owner ${config.botName} Bot;\n` + // the organization of the contact
-            `TEL;type=CELL;type=VOICE;waid=${config.ownerNumber[0]}:+${config.ownerNumber[0]}\n` + // WhatsApp ID + phone number
-            'END:VCARD'
-        return client.sendMessage(msg.from, {
-            contacts: {
-                displayName: config.ownerName,
-                contacts: [{ vcard }],
-            },
-        })
+    callback: async ({ msg }) => {
+        return msg.reply(`Perkenalkan saya *Fajar Khairul Ikhsan*, Saya seorang Laki-laki yang suka mengeksplorasi diri sendiri di bidang Teknologi.
+
+Berinovasi dalam memecahkan masalah melalui program kode sangat menyenangkan dan menantang.
+
+*Instagram:* @shannbot.ofc
+*Saweria:* https://saweria.co/SHANNBot
+*Req Fitur?* https://wa.me/6285781183473`)
     },
 }

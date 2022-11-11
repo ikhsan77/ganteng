@@ -8,7 +8,7 @@ const youtube = new Client()
  */
 module.exports = {
     aliases: ['yts'],
-    category: 'youtube',
+    category: 'Download',
     description: 'Youtube search.',
     waitMessage: true,
     minArgs: 1,
@@ -34,6 +34,6 @@ module.exports = {
                 .join('\n\n=====================\n')
             text += '```'
             return client.sendMessage(msg.from, { image: { url: result[0].thumbnail }, caption: text })
-        })
+        }).catch(() => {return msg.reply('Result Not Found')})
     },
 }
