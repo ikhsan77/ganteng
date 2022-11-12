@@ -5,7 +5,7 @@ const users = require('@database/services/users')
  * @type { ICommand }
  */
 module.exports = {
-    category: 'about',
+    category: 'About',
     description: 'Show your stats.',
     callback: async ({ msg }) => {
         const user = await users.findOne(msg.senderNumber)

@@ -23,7 +23,7 @@ module.exports = {
                 }
                 shannMsg += `\n#help <command>, untuk mengetahui penjelasan tentang cara penggunaannya.`
 
-                return client.sendMessage(msg.from, {text: shannMsg})
+                return client.sendMessage(msg.from, { text: shannMsg })
             }
 
             /**
@@ -69,13 +69,19 @@ module.exports = {
         }
 
         let dt = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('a')
-        let ucapanWaktu = "Selamat "+dt.charAt(0).toUpperCase() + dt.slice(1)
+        let ucapanWaktu = "Selamat " + dt.charAt(0).toUpperCase() + dt.slice(1)
         var text =
             `Hi ${msg.pushName || `@${msg.senderNumber}`}, ${ucapanWaktu}
             
 "Sistem otomatis (Whatsapp Bot) yang dapat membantu untuk melakukan sesuatu, mencari dan mendapatkan data atau informasi hanya dengan melalui Whatsapp"
 
 "Resiko terlalu dispam adalah bot akan mengalami delay/pending, apabila terjadi harap beri jeda hingga kembali normal"
+
+*Total command:* 
+=> ${commands.size} Aktif
+
+*Bot telah aktif selama*
+=> ${timeFormat(process.uptime())}
 
 *Group Official*
 => https://bit.ly/3E0CRYv
@@ -89,7 +95,7 @@ module.exports = {
 "Beberapa perintah terdapat penjelasan, silahkan ketik #help <command> untuk melihat penjelasannya"`
 
         return client.sendMessage(msg.from, {
-            image: {url: "https://i.ibb.co/yVhzrjj/20221029-131404.jpg"},
+            image: { url: "https://i.ibb.co/yVhzrjj/20221029-131404.jpg" },
             caption: text,
             footer: `© ${config.botName}`,
             templateButtons: [

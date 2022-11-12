@@ -12,8 +12,8 @@ const sticker = axios.create({
  */
 module.exports = {
     aliases: ['s'],
-    category: 'maker',
-    subCategory: 'sticker',
+    category: 'Sticker',
+    subCategory: 'Sticker',
     description: 'Sticker Maker',
     waitMessage: 'Please wait, making sticker...',
     callback: async ({ msg, client, message, prefix, command }) => {
@@ -22,8 +22,8 @@ module.exports = {
             const data = {
                 image: `data:image/jpeg;base64,${file.toString('base64')}`,
                 stickerMetadata: {
-                    pack: config.botName,
-                    author: 'Bot',
+                    pack: 'Fajarara',
+                    author: '@shannbot.ofc',
                     keepScale: true,
                     circle: false,
                     removebg: false,
@@ -36,8 +36,8 @@ module.exports = {
             const data = {
                 file: `data:video/mp4;base64,${file.toString('base64')}`,
                 stickerMetadata: {
-                    pack: config.botName,
-                    author: 'Bot',
+                    pack: 'Fajarara',
+                    author: '@shannbot.ofc',
                     keepScale: true,
                 },
                 processOptions: {
