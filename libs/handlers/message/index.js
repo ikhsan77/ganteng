@@ -52,7 +52,7 @@ module.exports = async (client, { messages, type }) => {
     let userMenfess = await knex('menfess').where({ room_b: msg.senderNumber, status: true }).first()
     if (userMenfess && msg.quoted && !msg.isGroup) {
         await knex('menfess').where({ room_b: msg.senderNumber, status: true }).first().update('status', false).then(async (deremol) => {
-            client.sendMessage(userMenfess.room_b + '@s.whatsapp.net', { text: `Kamu mendapat balasan dari\n@${msg.senderNumber}\n\nPesan Kamu:\n${userMenfess.message}\n\nBalasan:\n${msg.body}`, mentions: [msg.from] })
+            client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { text: `Kamu mendapat balasan dari\n@${msg.senderNumber}\n\nPesan Kamu:\n${userMenfess.message}\n\nBalasan:\n${msg.body}`, mentions: [msg.from] })
         })
     }
 
