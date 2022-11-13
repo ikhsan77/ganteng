@@ -26,7 +26,7 @@ module.exports = {
         } else if (!db.user_premium) {
             knex('users').where({ user_jid: args[0] }).update('user_premium', true)
                 .then(async () => {
-                    knex('users').where({ user_jid: args[0] }).update('user_premium_end', x(args[1]) + Date.now()).then((a) => {
+                    knex('users').where({ user_jid: args[0] }).update('user_premium_end', Date.now() + x(args[1])).then((a) => {
                         msg.reply('done')
                     })
                 })

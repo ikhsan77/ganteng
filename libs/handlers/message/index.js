@@ -29,10 +29,9 @@ module.exports = async (client, { messages, type }) => {
         message.message?.buttonsResponseMessage?.selectedButtonId ||
         message.message?.templateButtonReplyMessage?.selectedId ||
         null
-    const isCommand = /^[°•π÷×¶∆£¢€¥®™✓_=|~!?#$%^@*&.+-,©^\/]/.test(body)
+    const isCommand = /^[°•π÷×¶∆£¢€¥®™✓_=|~!?#$%^@*&.+-,©^\/]/gi.test(body)
     client.readMessages([message.key])
     if (message.type === 'protocolMessage' || message.type === 'senderKeyDistributionMessage' || !message.type) return
-    if (!isCommand) return
 
     const msg = await serialize(message, client)
     if (msg.responseId) {
@@ -41,7 +40,7 @@ module.exports = async (client, { messages, type }) => {
 
     let userPrem = await knex('users').where({ user_premium: true }).first()
     if (userPrem) {
-        if (Date.now() >= userPrem.user_premium) {
+        if (userPrem.user_premium_end <= Date.now()) {
             await knex('users').where({ user_jid: userPrem.user_jid }).update('user_premium', false).then(async () => {
                 await knex('users').where({ user_jid: userPrem.user_jid }).update('user_premium_end', 0).then(() => {
                     client.sendMessage(userPrem.user_jid + '@s.whatsapp.net', { text: '```Premium kamu sudah habis```' })
@@ -50,9 +49,16 @@ module.exports = async (client, { messages, type }) => {
         }
     }
 
-    const prefix = isCommand ? msg.body[0] : null
+    let userMenfess = await knex('menfess').where({ room_b: msg.senderNumber, status: true }).first()
+    if (userMenfess && msg.quoted && !msg.isGroup) {
+        await knex('menfess').where({ room_b: msg.senderNumber, status: true }).first().update('status', false).then(async (deremol) => {
+            client.sendMessage(userMenfess.room_b + '@s.whatsapp.net', { text: `Kamu mendapat balasan dari\n@${msg.senderNumber}\n\nPesan Kamu:\n${userMenfess.message}\n\nBalasan:\n${msg.body}`, mentions: [msg.from] })
+        })
+    }
+
+    const prefix = [''] ? /^[°•π÷×¶∆£¢€¥®™✓_=|~!?#$%^@*&.+-,©^\/]/gi.test(body) ? body.match(/^[°▸π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : [''] ?? prefix
     const args = msg.body?.trim()?.split(/ +/)?.slice(1)
-    const command = isCommand ? msg.body.slice(prefix.length).trim().split(/ +/).shift().toLowerCase() : null
+    const command = isCommand ? msg.body.slice(prefix.length).trim().split(/ +/).shift().toLowerCase() : msg.body
     const fullArgs = msg.body?.replace(command, '')?.slice(1)?.trim() || null
 
     /**
@@ -82,7 +88,7 @@ module.exports = async (client, { messages, type }) => {
             return msg.reply(i18n.__('message.owner_only'))
         }
 
-        if (getCommand.premiumOnly && !user.user_premium) {
+        if (getCommand.premiumOnly && !user.user_premium && !config.ownerNumber.includes(msg.senderNumber)) {
             return msg.reply(i18n.__('message.premium_only'))
         }
 
@@ -102,18 +108,11 @@ module.exports = async (client, { messages, type }) => {
         }
 
         if (getCommand.privateOnly && msg.isGroup) {
-            return msg.reply(i18n.__('message.admin_only'))
+            return msg.reply(i18n.__('message.private_only'))
         }
 
         if (getCommand.minArgs && getCommand.minArgs > args.length) {
-            var text = `*Minimal argument adalah ${getCommand.minArgs}*\n\n`
-            if (getCommand.expectedArgs) {
-                text += `*Usage :* {prefix}{command} {argument}\n`
-                text += `*Argument :* ${getCommand.expectedArgs}\n`
-            }
-            if (getCommand.example) {
-                text += `*Example :* ${getCommand.example}`
-            }
+            var text = `*Example :* ${getCommand.example}`
             return msg.reply(text.format({ prefix, command, argument: getCommand.expectedArgs }))
         }
 

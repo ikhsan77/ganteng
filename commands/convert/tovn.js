@@ -14,7 +14,7 @@ module.exports = {
 
         if (msg.typeCheck.isVideo || msg.typeCheck.isQuotedVideo) {
             const result = await toPTT(media, 'mp4')
-            await client.sendMessage(msg.from, { audio: result, mimetype: 'audio/mpeg', ptt: true }, { quoted: message }).catch(() => {return msg.reply('Terjadi kesalahan')})
+            await client.sendMessage(msg.from, { audio: result, mimetype: 'audio/mpeg', ptt: true }, { quoted: message }).catch(() => { return msg.reply('Terjadi kesalahan') })
         } else return msg.reply('Send/reply video dengan caption #tovn')
     }
 }

@@ -12,7 +12,7 @@ module.exports = {
     waitMessage: true,
     minArgs: 1,
     expectedArgs: '<link>',
-    example: '{prefix}{command} https://www.mediafire.com/file/xxxx',
+    example: '{prefix}{command} https://www.pinterest.com/xxx',
     callback: async ({ msg, args }) => {
         let result = await x.downloader.pinterestdl(args[0])
         let res = await axios.head(result[0].url)
