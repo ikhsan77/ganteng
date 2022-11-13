@@ -39,9 +39,4 @@ const addExp = async (msg, user_jid, exp) => {
         })
 }
 
-module.exports = {
-    findOne,
-    create,
-    update,
-    addExp,
-}
+module.exports = { findOne, create, update, addExp }

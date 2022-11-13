@@ -8,7 +8,7 @@ const x = require('xfarr-api')
 module.exports = {
     aliases: ['pinterestdl', 'pin'],
     category: 'Download',
-    description: 'Downloader',
+    description: 'Downloader Pinterest',
     waitMessage: true,
     minArgs: 1,
     expectedArgs: '<link>',

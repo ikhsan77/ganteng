@@ -7,7 +7,7 @@ const exec = require('xfarr-api')
 module.exports = {
     aliases: ['imdbdl'],
     category: 'Download',
-    description: 'Downloader',
+    description: 'Downloader IMDB',
     waitMessage: true,
     minArgs: 1,
     expectedArgs: '<link>',

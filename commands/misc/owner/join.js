@@ -7,7 +7,7 @@ const moment = require('moment-timezone')
 module.exports = {
     category: 'owner',
     description: 'Join group by link.',
-    ownerOnly: true,
+    premiumOnly: true,
     minArgs: 1,
     expectedArgs: '<link>',
     example: '{prefix}{command} https://chat.whatsapp.com/xxxxxxxxxxxxxxxx',

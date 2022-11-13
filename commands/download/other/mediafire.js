@@ -8,7 +8,7 @@ const x = require('caliph-api')
 module.exports = {
     aliases: ['mediafiredl'],
     category: 'Download',
-    description: 'Downloader',
+    description: 'Downloader Mediafire',
     waitMessage: true,
     minArgs: 1,
     expectedArgs: '<link>',

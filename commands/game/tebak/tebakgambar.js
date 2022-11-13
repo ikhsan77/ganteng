@@ -28,7 +28,6 @@ module.exports = {
         })
             .on('collect', (msg) => {
                 let xp = Math.floor(Math.random() * (999 - 1) + 1)
-                users.addExp(msg, msg.senderNumber, xp)
                 msg.reply(i18n.__('game.right_answer', { xp }))
             })
             .on('end', (res) => {

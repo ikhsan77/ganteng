@@ -39,6 +39,17 @@ module.exports = async (client, { messages, type }) => {
         msg.body = msg.responseId
     }
 
+    let userPrem = await knex('users').where({ user_premium: true }).first()
+    if (userPrem) {
+        if (Date.now() >= userPrem.user_premium) {
+            await knex('users').where({ user_jid: userPrem.user_jid }).update('user_premium', false).then(async () => {
+                await knex('users').where({ user_jid: userPrem.user_jid }).update('user_premium_end', 0).then(() => {
+                    client.sendMessage(userPrem.user_jid + '@s.whatsapp.net', { text: '```Premium kamu sudah habis```' })
+                })
+            })
+        }
+    }
+
     const prefix = isCommand ? msg.body[0] : null
     const args = msg.body?.trim()?.split(/ +/)?.slice(1)
     const command = isCommand ? msg.body.slice(prefix.length).trim().split(/ +/).shift().toLowerCase() : null
@@ -76,7 +87,7 @@ module.exports = async (client, { messages, type }) => {
         }
 
         if (getCommand.groupOnly && !msg.isGroup) {
-            return msg.reply(i18n.__('message.private_only'))
+            return msg.reply(i18n.__('message.group_only'))
         }
 
         if (
@@ -87,7 +98,7 @@ module.exports = async (client, { messages, type }) => {
                 .map((v) => v.id)
                 .includes(msg.senderNumber + '@s.whatsapp.net')
         ) {
-            return msg.reply(i18n.__('message.group_only'))
+            return msg.reply(i18n.__('message.admin_only'))
         }
 
         if (getCommand.privateOnly && msg.isGroup) {
@@ -126,11 +137,6 @@ module.exports = async (client, { messages, type }) => {
             }
         }
 
-        return getCommand.callback({ client, message, msg, command, prefix, args, fullArgs }).then(async () => {
-            users.addExp(msg, msg.senderNumber, 100)
-            if (getCommand.limit) {
-                await knex('users').decrement('user_limit', 1)
-            }
-        })
+        return getCommand.callback({ client, message, msg, command, prefix, args, fullArgs })
     }
 }

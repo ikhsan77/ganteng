@@ -8,7 +8,7 @@ const youtube = new Client()
  */
 module.exports = {
     aliases: ['yts'],
-    category: 'Download',
+    category: 'Search',
     description: 'Youtube search.',
     waitMessage: true,
     minArgs: 1,

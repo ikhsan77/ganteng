@@ -8,7 +8,7 @@ const config = require('@config')
 module.exports = {
     aliases: ['fb', 'fbdl'],
     category: 'Download',
-    description: 'Downloader',
+    description: 'Facebook video downloader',
     waitMessage: true,
     minArgs: 1,
     expectedArgs: '<link>',

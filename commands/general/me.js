@@ -1,5 +1,6 @@
 const { ICommand } = require('@libs/builders/command')
 const users = require('@database/services/users')
+const x = require('ms')
 
 /**
  * @type { ICommand }
@@ -7,15 +8,14 @@ const users = require('@database/services/users')
 module.exports = {
     category: 'About',
     description: 'Show your stats.',
-    callback: async ({ msg }) => {
+    callback: async ({ msg, message }) => {
         const user = await users.findOne(msg.senderNumber)
-        return msg.reply(`
-User Number : ${user.user_jid}
-User Limit : ${user.user_limit}
-User Level : Lv. ${user.user_level}
-User Exp : ${user.user_exp} XP
-User Premium : ${user.user_premium ? 'Yes' : 'No'}
-User Registered At : ${user.user_create_at}
-`)
+        const shannMsg = `Halo @${msg.senderNumber}
+
+📍 Number : ${user.user_jid}
+📍 Status : ${user.user_premium ? 'Premium' : 'Free'}${user.user_premium ? '\n📍 Expired : ' + x(user.user_premium_end - Date.now(), { long: true }) : ''}
+📍 Registered : ${user.user_create_at} ${user.user_premium ? '\n\n_Terimakasih sudah berlanggalan premium di SHANNBot_' : '\n\n_Ingin bisa akses semua fitur dan juga add bot ke group kamu ? #sewa_'}`
+
+        return msg.replyWithMentions(shannMsg, [msg.from], message)
     },
 }
