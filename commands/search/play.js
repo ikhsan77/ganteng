@@ -15,7 +15,7 @@ module.exports = {
     minArgs: 1,
     expectedArgs: '<query>',
     example: '{prefix}{command} melukis senja',
-    callback: async ({ msg, client, message, fullArgs }) => {
+    callback: async ({ msg, client, fullArgs }) => {
         const { data } = await x.get('https://api.lolhuman.xyz/api/ytplay?apikey={apikey}&query={query}'.format({ apikey: y.apikey, query: fullArgs })).catch(() => { return msg.reply('Server dalam perbaikkan') })
 
         if (!data) return msg.reply('Server dalam perbaikkan')
@@ -28,6 +28,6 @@ module.exports = {
 📍 Penonton : ${data.result.info.view} views
 📍 Link Video : https://www.youtube.com/watch?v=${data.result.info.id}`
 
-        client.sendMessage(msg.from, { image: { url: data.result.info.thumbnail }, caption: text, templateButtons: [{ index: 1, quickReplyButton: { displayText: '🎧 Audio', id: `#yta https://www.youtube.com/watch?v=${data.result.info.id}` } }, { index: 2, quickReplyButton: { displayText: '📽️ Video', id: `#ytv https://www.youtube.com/watch?v=${data.result.info.id}` } }] }).catch(() => { return msg.reply('Terjadi kesalahan') })
+        client.sendMessage(msg.from, { image: { url: data.result.info.thumbnail }, caption: text, footer: `© ${y.botName}`, templateButtons: [{ index: 1, quickReplyButton: { displayText: '🎧 Audio', id: `#yta https://www.youtube.com/watch?v=${data.result.info.id}` } }, { index: 2, quickReplyButton: { displayText: '📽️ Video', id: `#ytv https://www.youtube.com/watch?v=${data.result.info.id}` } }], viewOnce: true }).catch(() => { return msg.reply('Terjadi kesalahan') })
     },
 }
