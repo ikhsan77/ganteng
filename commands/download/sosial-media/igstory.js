@@ -6,7 +6,7 @@ const config = require('@config')
  * @type { ICommand }
  */
 module.exports = {
-    aliases: ['instastory',],
+    aliases: ['instastory'],
     category: 'Download',
     description: 'Instagram story downloader.',
     waitMessage: true,

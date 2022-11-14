@@ -29,7 +29,7 @@ module.exports = async (client, { messages, type }) => {
         message.message?.buttonsResponseMessage?.selectedButtonId ||
         message.message?.templateButtonReplyMessage?.selectedId ||
         null
-    const isCommand = /^[°•π÷×¶∆£¢€¥®™✓_=|~!?#$%^@*&.+-,©^\/]/gi.test(body)
+    const isCommand = /^[°•π÷×¶∆£¢€¥®™✓_=|~!?#$%^@*&.+-,©^\/]/.test(body)
     client.readMessages([message.key])
     if (message.type === 'protocolMessage' || message.type === 'senderKeyDistributionMessage' || !message.type) return
 
@@ -49,15 +49,29 @@ module.exports = async (client, { messages, type }) => {
         }
     }
 
+    let userAnom = await knex('anonymous').where({ room_a: msg.from, status: 'chatting' }).first()
+    let findAnom = await knex('anonymous').where({ room_b: msg.from, status: 'chatting' }).first()
+    if (msg.body !== msg.body[0] + 'skip' && msg.body !== msg.body[0] + 'next' && msg.body !== msg.body[0] + 'leave' && msg.body !== msg.body[0] + 'start') {
+        if (userAnom && !findAnom) {
+            if (userAnom.room_b !== 'kosong') await client.sendMessage(userAnom.room_b, { text: msg.body })
+        } else if (!userAnom && findAnom) {
+            await client.sendMessage(findAnom.room_a, { text: msg.body })
+        }
+    }
+
     let userMenfess = await knex('menfess').where({ room_b: msg.senderNumber, status: true }).first()
     if (userMenfess && msg.quoted && !msg.isGroup) {
         await knex('menfess').where({ room_b: msg.senderNumber, status: true }).first().update('status', false).then(async (deremol) => {
             client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { text: `Kamu mendapat balasan dari\n@${msg.senderNumber}\n\nPesan Kamu:\n${userMenfess.message}\n\nBalasan:\n${msg.body}`, mentions: [msg.from] })
             msg.reply('Berhasil mengirim pesan balasan\n\n_tertarik mencoba? ketik #menfess_')
         })
+
+        return
     }
 
-    const prefix = [''] ? /^[°•π÷×¶∆£¢€¥®™✓_=|~!?#$%^@*&.+-,©^\/]/gi.test(body) ? body.match(/^[°▸π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : [''] ?? prefix
+    if (!isCommand) return
+
+    const prefix = isCommand ? msg.body[0] : null
     const args = msg.body?.trim()?.split(/ +/)?.slice(1)
     const command = isCommand ? msg.body.slice(prefix.length).trim().split(/ +/).shift().toLowerCase() : msg.body
     const fullArgs = msg.body?.replace(command, '')?.slice(1)?.trim() || null
