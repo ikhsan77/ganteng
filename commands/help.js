@@ -95,6 +95,6 @@ module.exports = {
             ],
             viewOnce: true,
             mentions: [msg.sender],
-        }, { quoted: message })
+        })
     },
 }
