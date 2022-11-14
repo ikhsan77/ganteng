@@ -4,6 +4,7 @@ const { timeFormat } = require('@libs/utils')
 const moment = require('moment-timezone')
 const config = require('@config')
 const i18n = require('i18n')
+const message = require('@libs/handlers/message')
 
 /**
  * @type { ICommand }
@@ -31,7 +32,8 @@ module.exports = {
              */
             let command = commands.get(args[0]) || commands.find((v) => v?.aliases?.includes(args[0]))
             if (command) {
-                let text = `*➪ Command :* ${args[0]}\n`
+                let text = `Halo @${msg.senderNumber}\n\n`
+                text += `*➪ Command :* ${args[0]}\n`
                 text += `*➪ Alias :* ${command?.aliases?.join(', ') || '-'}\n`
                 text += `*➪ Category :* ${command.category}\n`
                 if (command?.groupOnly) {
@@ -51,18 +53,7 @@ module.exports = {
                 }
                 text += `*➪ Description :* ${command.description}\n`
                 text += `*➪ Example :* ${command?.example?.format({ prefix, command: args[0] }) || `${prefix}${args[0]}`}`
-                return client.sendMessage(msg.from, {
-                    text: text.trim(),
-                    templateButtons: [
-                        {
-                            urlButton: {
-                                displayText: 'Copy',
-                                url: `https://www.whatsapp.com/otp/copy/${prefix}${args[0]}`,
-                            },
-                        },
-                    ],
-                    viewOnce: true,
-                })
+                return client.sendMessage(msg.from, { text: text.trim(), mentions: [msg.senderNumber + '@s.whatsapp.net'], templateButtons: [{ urlButton: { displayText: 'Copy', url: `https://www.whatsapp.com/otp/copy/${prefix}${args[0]}`, }, },], viewOnce: true, })
             } else {
                 return msg.reply(i18n.__('command.not_found', { command: args[0] }))
             }
@@ -104,6 +95,6 @@ module.exports = {
             ],
             viewOnce: true,
             mentions: [msg.sender],
-        })
+        }, { quoted: message })
     },
 }

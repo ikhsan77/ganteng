@@ -5,6 +5,7 @@ const config = require('@config')
  * @type { ICommand }
  */
 module.exports = {
+    aliases: ['creator'],
     category: 'About',
     description: 'Show owner this bot.',
     callback: async ({ msg }) => {

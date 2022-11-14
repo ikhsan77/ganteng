@@ -17,6 +17,6 @@ module.exports = {
         if (!result) return msg.reply('Server sedang dalam perbaikkan')
         if (!result.media.length) return msg.reply('Link tidak valid')
 
-        return msg.replyVideo({ url: (result.media[0] ? result.media[0].url : '') }, `Download from ${args[0]}`).catch(() => { return msg.reply('Terjadi kesalahan saat mengirim media') })
+        return msg.replyVideo({ url: (result.media[1] ? result.media[1].url : '') }, `Download from ${args[0]}`).catch(() => { return msg.reply('Terjadi kesalahan saat mengirim media') })
     },
 }
