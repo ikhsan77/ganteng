@@ -10,7 +10,7 @@ const _collection = new Map()
  * @type { ICommand }
  */
 module.exports = {
-    category: 'game',
+    category: 'Game',
     description: 'Game tebak gambar, guest and get exp.',
     callback: async ({ msg }) => {
         if (_collection.get(msg.from)) {

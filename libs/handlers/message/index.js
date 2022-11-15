@@ -62,8 +62,25 @@ module.exports = async (client, { messages, type }) => {
     let userMenfess = await knex('menfess').where({ room_b: msg.senderNumber, status: true }).first()
     if (userMenfess && msg.quoted && !msg.isGroup) {
         await knex('menfess').where({ room_b: msg.senderNumber, status: true }).first().update('status', false).then(async (deremol) => {
-            client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { text: `Kamu mendapat balasan dari\n@${msg.senderNumber}\n\nPesan Kamu:\n${userMenfess.message}\n\nBalasan:\n${msg.body}`, mentions: [msg.from] })
-            msg.reply('Berhasil mengirim pesan balasan\n\n_tertarik mencoba? ketik #menfess_')
+            let pjtxt = `Kamu mendapat balasan dari\n@${msg.senderNumber}\n\nPesan Kamu:\n${userMenfess.message}\n\nBalasan:\n${msg.body}`
+            let file = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
+
+            if (msg.typeCheck.isImage || msg.typeCheck.isQuotedImage) {
+                return client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { image: file, caption: pjtxt, mentions: [msg.sender] }).then(() => { return msg.reply('berhasil mengirim pesan balasan\n\n_tertarik mencoba? ketik #menfess_') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+            } else if (msg.typeCheck.isVideo || msg.typeCheck.isQuotedVideo) {
+                return client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { video: file, caption: pjtxt, mentions: [msg.sender] }).then(() => { return msg.reply('berhasil mengirim pesan balasan\n\n_tertarik mencoba? ketik #menfess_') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+            } else if (msg.typeCheck.isAudio || msg.typeCheck.isQuotedAudio) {
+                let msgNya = await client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { audio: file })
+                return client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { text: pjtxt, mentions: [msg.sender] }, { quoted: msgNya }).then(() => { return msg.reply('berhasil mengirim pesan balasan\n\n_tertarik mencoba? ketik #menfess_') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+            } else if (msg.typeCheck.isSticker || msg.typeCheck.isQuotedSticker) {
+                let msgNya = await client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { sticker: file })
+                return client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { text: pjtxt, mentions: [msg.sender] }, { quoted: msgNya }).then(() => { return msg.reply('berhasil mengirim pesan balasan\n\n_tertarik mencoba? ketik #menfess_') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+            } else if (msg.typeCheck.isContact || msg.typeCheck.isQuotedContact) {
+                let msgNya = await client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { contacts: { displayName: msg.quoted.message.contactMessage.displayName, contacts: [{ vcard: msg.quoted.message.contactMessage.vcard }] } })
+                return client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { text: pjtxt, mentions: [msg.sender] }, { quoted: msgNya }).then(() => { return msg.reply('berhasil mengirim pesan balasan\n\n_tertarik mencoba? ketik #menfess_') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+            } else {
+                return client.sendMessage(userMenfess.room_a + '@s.whatsapp.net', { text: pjtxt, mentions: [msg.sender] }).then(() => { return msg.reply('berhasil mengirim pesan balasan\n\n_tertarik mencoba? ketik #menfess_') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+            }
         })
 
         return

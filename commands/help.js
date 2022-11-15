@@ -33,29 +33,21 @@ module.exports = {
             let command = commands.get(args[0]) || commands.find((v) => v?.aliases?.includes(args[0]))
             if (command) {
                 let text = `Halo @${msg.senderNumber}\n\n`
-                text += `*➪ Command :* ${args[0]}\n`
-                text += `*➪ Alias :* ${command?.aliases?.join(', ') || '-'}\n`
-                text += `*➪ Category :* ${command.category}\n`
-                if (command?.groupOnly) {
-                    text += `*➪ Group Only :* Yes\n`
-                }
-                if (command?.adminOnly) {
-                    text += `*➪ Admin Only :* Yes\n`
-                }
-                if (command?.privateOnly) {
-                    text += `*➪ Private Only :* Yes\n`
-                }
-                if (command?.premiumOnly) {
-                    text += `*➪ Premium Only :* Yes\n`
-                }
-                if (command?.ownerOnly) {
-                    text += `*➪ Owner Only :* Yes\n`
-                }
-                text += `*➪ Description :* ${command.description}\n`
-                text += `*➪ Example :* ${command?.example?.format({ prefix, command: args[0] }) || `${prefix}${args[0]}`}`
-                return client.sendMessage(msg.from, { text: text.trim(), mentions: [msg.senderNumber + '@s.whatsapp.net'], templateButtons: [{ urlButton: { displayText: 'Copy', url: `https://www.whatsapp.com/otp/copy/${prefix}${args[0]}`, }, },], viewOnce: true, })
+                text += `*⦿ Command :* ${args[0]}\n`
+                text += `*⦿ Alias :* ${command?.aliases?.join(', ') || '-'}\n`
+                text += `*⦿ Category :* ${command.category}\n`
+                text += `*⦿ Description :* ${command.description}\n`
+                text += `*⦿ Example :* ${command?.example?.format({ prefix, command: args[0] }) || `${prefix}${args[0]}`}`
+                if (command?.groupOnly && command?.adminOnly) text += `\n\nCommand ini hanya dapat digunakan di dalam Group dan Admin Group.`
+                if (command?.groupOnly && !command?.adminOnly) text += `\n\nCommand ini hanya dapat digunakan di dalam Group.`
+                if (!command?.groupOnly && command?.adminOnly) text += `\n\nCommand ini hanya dapat digunakan oleh Admin Group.`
+                if (command?.privateOnly) text += `\n\nCommand ini hanya dapat digunakan di Private Chat`
+                if (command?.premiumOnly) text += `\n\nCommand ini hanya dapat digunakan oleh pengguna Premium`
+                if (command?.ownerOnly) text += `\n\nCommand ini hanya dapat digunakan oleh Owner`
+
+                return client.sendMessage(msg.from, { text: text.trim(), mentions: [msg.sender] })
             } else {
-                return msg.reply(i18n.__('command.not_found', { command: args[0] }))
+                return msg.reply('Command not found')
             }
         }
 
@@ -63,25 +55,18 @@ module.exports = {
         let ucapanWaktu = "Selamat " + dt.charAt(0).toUpperCase() + dt.slice(1)
         var text =
             `Hi ${msg.pushName || `@${msg.senderNumber}`}, ${ucapanWaktu}
-            
-"Sistem otomatis (Whatsapp Bot) yang dapat membantu untuk melakukan sesuatu, mencari dan mendapatkan data atau informasi hanya dengan melalui Whatsapp"
+
+𝙄𝙉𝙁𝙊 𝘽𝙊𝙏
+⦿ Fitur : ${commands.size} Active
+⦿ Group : https://bit.ly/3E0CRYv
+⦿ Owner : https://wa.me/6285781183473
+⦿ Runtime : ${timeFormat(process.uptime())}
+
+𝘾𝙊𝙈𝙈𝘼𝙉𝘿𝙎
+⦿ #sewa
+⦿ #creator
 
 "Resiko terlalu dispam adalah bot akan mengalami delay/pending, apabila terjadi harap beri jeda hingga kembali normal"
-
-*Total command:* 
-=> ${commands.size} Aktif
-
-*Bot telah aktif selama*
-=> ${timeFormat(process.uptime())}
-
-*Group Official*
-=> https://bit.ly/3E0CRYv
-
-*Ingin invite bot ini ke group kamu?*
-=> #sewa
-
-*Apabila menemukan error, ada pertanyaan, request fitur*
-=> #creator
 
 "Beberapa perintah terdapat penjelasan, silahkan ketik #help <command> untuk melihat penjelasannya"`
 

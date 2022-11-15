@@ -10,7 +10,7 @@ module.exports = {
     ownerOnly: true,
     waitMessage: true,
     callback: async ({ msg, client, fullArgs }) => {
-        let users = knex('users')
+        let users = await knex('users')
         if (!users) return msg.reply('Database kosong')
 
         for (var i of users) {
