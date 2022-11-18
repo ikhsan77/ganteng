@@ -24,9 +24,12 @@ module.exports = {
                 let buffer = await writeExifImg(file, { packname: m1, author: m2 })
                 if (!buffer) return msg.reply('Server dalam perbaikkan')
 
-                client.sendMessage(msg.from, { sticker: { url: buffer } }, { quoted: message })
+                client.sendMessage(msg.from, { sticker: { url: buffer } }, { quoted: message }).catch(() => { return msg.reply('Terjadi kesalahan') })
             } else if (msg.quoted.message.stickerMessage.isAnimated) {
-                msg.reply('Fitur sedang dalam perbaikkan')
+                let buffer = await writeExifVid(file, { packname: m1, author: m2 })
+                if (!buffer) return msg.reply('Server dalam perbaikkan')
+
+                client.sendMessage(msg.from, { sticker: { url: buffer } }, { quoted: message }).catch(() => { return msg.reply('Terjadi kesalahan') })
             }
 
         } else return msg.reply(i18n.__('sticker.no_media'))
