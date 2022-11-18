@@ -6,7 +6,7 @@ const webp = require("node-webpmux")
 const path = require("path")
 
 
-async function imageToWebp (media) {
+async function imageToWebp(media) {
 
     const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
     const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.jpg`)
@@ -33,7 +33,7 @@ async function imageToWebp (media) {
     return buff
 }
 
-async function videoToWebp (media) {
+async function videoToWebp(media) {
 
     const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
     const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.mp4`)
@@ -71,7 +71,7 @@ async function videoToWebp (media) {
     return buff
 }
 
-async function writeExifImg (media, metadata) {
+async function writeExifImg(media, metadata) {
     let wMedia = await imageToWebp(media)
     const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
     const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
@@ -92,7 +92,7 @@ async function writeExifImg (media, metadata) {
     }
 }
 
-async function writeExifVid (media, metadata) {
+async function writeExifVid(media, metadata) {
     let wMedia = await videoToWebp(media)
     const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
     const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
@@ -113,7 +113,7 @@ async function writeExifVid (media, metadata) {
     }
 }
 
-async function writeExif (media, metadata) {
+async function writeExif(media, metadata) {
     let wMedia = /webp/.test(media.mimetype) ? media.data : /image/.test(media.mimetype) ? await imageToWebp(media.data) : /video/.test(media.mimetype) ? await videoToWebp(media.data) : ""
     const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
     const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
