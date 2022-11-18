@@ -83,6 +83,22 @@ const connect = async () => {
         if (type !== 'notify') return
         messageHandler(client, { messages, type })
     })
+
+    client.ev.on('group-participants.update', async (anu) => {
+        try {
+            let participants = anu.participants
+
+            for (let num of participants) {
+                if (anu.action == 'add') {
+                    client.sendMessage(anu.id, { text: `Silahkan baca deskripsi grup @${num.split("@")[0]}`, mentions: [num] })
+                } else if (anu.action == 'remove') {
+                    client.sendMessage(anu.id, { text: `Goodbye @${num.split("@")[0]}`, mentions: [num] })
+                }
+            }
+        } catch (err) {
+            logger.error('Group Participants Error')
+        }
+    })
 }
 
 module.exports = {

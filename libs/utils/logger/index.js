@@ -6,7 +6,7 @@ const logger = winston.createLogger({
         transform: (info, opts) => {
             switch (info.level) {
                 case 'info':
-                    console.info(chalk.whiteBright('├'), chalk.keyword('aqua')(`[  INGFO  ]`), info.message)
+                    console.info(chalk.whiteBright('├'), chalk.keyword('aqua')(`[  INFO  ]`), info.message)
                     break
                 case 'warn':
                     console.warn(chalk.whiteBright('├'), chalk.keyword('yellow')(`[ WARNING ]`), info.message)

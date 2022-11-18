@@ -21,8 +21,8 @@ module.exports = {
         const file = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
         if (msg.typeCheck.isSticker || msg.typeCheck.isQuotedSticker) {
             let [m1, m2] = fullArgs.split('|')
-            if (!m1) return msg.reply('*#xample:* #take Fajarara|@shannbot.ofc')
-            if (!m2) return msg.reply('*#xample:* #take Fajarara|@shannbot.ofc')
+            if (!m1) return msg.reply('*example:* #take Fajarara|@shannbot.ofc')
+            if (!m2) return msg.reply('*example:* #take Fajarara|@shannbot.ofc')
 
             if (!msg.quoted.message.stickerMessage.isAnimated) {
                 let buffer = await writeExifImg(file, { packname: m1, author: m2 })
