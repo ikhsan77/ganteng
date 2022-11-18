@@ -8,9 +8,7 @@ module.exports = {
     category: 'About',
     description: 'Sewa bot.',
     callback: async ({ msg, message }) => {
-        const shannMsg = `Halo @${msg.senderNumber}
-
-Apa itu premium? yaitu pengguna membayar terlebih dahulu (membeli) untuk dapat mengakses dan memperoleh manfaat dari fitur tertentu.
+        const shannMsg = `Apa itu premium? yaitu pengguna membayar terlebih dahulu (membeli) untuk dapat mengakses dan memperoleh manfaat dari fitur tertentu.
 
 Premium/sewa juga berarti membantu (Support) Creator dalam mengembangkan bot. Jika kamu ingin upgrade ke user premium, silahkan cek info pembayaran dibawah
 
@@ -22,7 +20,7 @@ Premium/sewa juga berarti membantu (Support) Creator dalam mengembangkan bot. Ji
 => Rp 8.000 | 1 Minggu
 => Rp 15.000 | 1 Bulan
 
-untuk pembelian kamu bisa langsung melakukan pembayaran melalui link berikut:
+untuk pembelian kamu bisa langsung melakukan pembayaran melalui qris diatas atau melalui link berikut:
 => https://saweria.co/SHANNBot
 
 setelah melakukan pembayaran, kirimkan bukti pembayaran ke #creator dan kirim formulir seperti berikut:
@@ -35,6 +33,6 @@ Informasi:
 2. Jika masa sewa sudah habis, bot tidak dikeluarkan dari group kamu (permanen)
 3. Jika kamu sebelumnya membeli paket premium dengan harga promo/diskon, jangan khawatir karna harga promo/diskon bisa diperpanjang dengan harga yg sama dengan harga dibulan pertama`
 
-        return msg.replyWithMentions(shannMsg, [msg.sender], message)
+        return msg.replyImage({ url: 'https://i.ibb.co/d5Q8W9s/20221118-140654.jpg' }, shannMsg)
     },
 }
