@@ -77,9 +77,8 @@ function toVideo(buffer, ext) {
   ], ext, 'mp4')
 }
 
-module.exports = {
-  toAudio,
-  toPTT,
-  toVideo,
-  ffmpeg,
+async function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+module.exports = { toAudio, toPTT, toVideo, ffmpeg, sleep }
