@@ -35,23 +35,23 @@ module.exports = {
         await knex('menfess').insert({ room_a: msg.senderNumber, room_b: m1, message: m2, status: true }).then(async () => {
             if (users.user_premium) {
                 if (msg.typeCheck.isImage || msg.typeCheck.isQuotedImage) {
-                    return client.sendMessage(mq1, { image: file, caption: pjtxt }).then(() => { return msg.reply('berhasil mengirim pesan') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+                    return client.sendMessage(mq1, { image: file, caption: pjtxt }).then(() => { return msg.reply('Berhasil mengirim pesan.') }).catch(() => { return msg.reply('gagal mengirim pesan') })
                 } else if (msg.typeCheck.isVideo || msg.typeCheck.isQuotedVideo) {
-                    return client.sendMessage(mq1, { video: file, caption: pjtxt }).then(() => { return msg.reply('berhasil mengirim pesan') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+                    return client.sendMessage(mq1, { video: file, caption: pjtxt }).then(() => { return msg.reply('Berhasil mengirim pesan.') }).catch(() => { return msg.reply('gagal mengirim pesan') })
                 } else if (msg.typeCheck.isAudio || msg.typeCheck.isQuotedAudio) {
                     let msgNya = await client.sendMessage(mq1, { audio: file })
-                    return client.sendMessage(mq1, { text: pjtxt }, { quoted: msgNya }).then(() => { return msg.reply('berhasil mengirim pesan') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+                    return client.sendMessage(mq1, { text: pjtxt }, { quoted: msgNya }).then(() => { return msg.reply('Berhasil mengirim pesan.') }).catch(() => { return msg.reply('gagal mengirim pesan') })
                 } else if (msg.typeCheck.isSticker || msg.typeCheck.isQuotedSticker) {
                     let msgNya = await client.sendMessage(mq1, { sticker: file })
-                    return client.sendMessage(mq1, { text: pjtxt }, { quoted: msgNya }).then(() => { return msg.reply('berhasil mengirim pesan') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+                    return client.sendMessage(mq1, { text: pjtxt }, { quoted: msgNya }).then(() => { return msg.reply('Berhasil mengirim pesan.') }).catch(() => { return msg.reply('gagal mengirim pesan') })
                 } else if (msg.typeCheck.isContact || msg.typeCheck.isQuotedContact) {
                     let msgNya = await client.sendMessage(mq1, { contacts: { displayName: msg.quoted.message.contactMessage.displayName, contacts: [{ vcard: msg.quoted.message.contactMessage.vcard }] } })
-                    return client.sendMessage(mq1, { text: pjtxt }, { quoted: msgNya }).then(() => { return msg.reply('berhasil mengirim pesan') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+                    return client.sendMessage(mq1, { text: pjtxt }, { quoted: msgNya }).then(() => { return msg.reply('Berhasil mengirim pesan.') }).catch(() => { return msg.reply('gagal mengirim pesan') })
                 } else {
-                    return client.sendMessage(mq1, { text: pjtxt }).then(() => { return msg.reply('berhasil mengirim pesan') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+                    return client.sendMessage(mq1, { text: pjtxt }).then(() => { return msg.reply('Berhasil mengirim pesan.') }).catch(() => { return msg.reply('gagal mengirim pesan') })
                 }
             } else if (!users.user_premium) {
-                return client.sendMessage(mq1, { text: pjtxt }).then(() => { return msg.reply('berhasil mengirim pesan') }).catch(() => { return msg.reply('gagal mengirim pesan') })
+                return client.sendMessage(mq1, { text: pjtxt }).then(() => { return msg.replyImage({ url: 'https://i.ibb.co/3YZCYw6/20221115-221911-0000.png' }, 'Berhasil mengirim pesan.\n\nIngin mengirim Media ke orang yang kamu suka ? Ayo upgrade ke premium agar bisa mengirim pesan media ke orang yang kamu suka!') }).catch(() => { return msg.reply('gagal mengirim pesan') })
             } else {
                 msg.reply('?')
             }

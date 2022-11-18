@@ -4,6 +4,7 @@ const { ICommand } = require('@libs/builders/command')
  * @type { ICommand }
  */
 module.exports = {
+    aliases: ['premium'],
     category: 'About',
     description: 'Sewa bot.',
     callback: async ({ msg, message }) => {
