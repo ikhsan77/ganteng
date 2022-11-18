@@ -18,6 +18,6 @@ module.exports = {
         if (!data) return msg.reply('Server sedang dalam perbaikkan')
         if (data.status !== 200) return msg.reply('Link tidak valid')
 
-        msg.replyAudio({ url: data.result.link.link }).catch(() => { return msg.reply('Server sedang dalam perbaikkan') })
+        msg.replyAudio({ url: data.result.link.link }).catch(() => { return msg.reply('Terjadi kesalahan') })
     },
 }
