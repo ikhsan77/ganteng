@@ -13,7 +13,7 @@ module.exports = {
     expectedArgs: '<pack>|<author>',
     example: '{prefix}{command} Fajarara|@shannbot.ofc',
     waitMessage: true,
-    callback: async ({ msg, client, message, prefix, command }) => {
+    callback: async ({ msg, client, message, prefix, command, fullArgs }) => {
         const file = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
 
         let [m1, m2] = fullArgs.split('|')
