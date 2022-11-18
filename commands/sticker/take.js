@@ -3,7 +3,7 @@ const { writeExifImg, writeExifVid } = require('@libs/converter/exif')
 const i18n = require('i18n')
 const axios = require('axios').default
 const { UploadFileUgu } = require('@libs/converter/upload')
-const { up } = require('@database/migrations/20220822141103_users')
+const fs = require('fs')
 
 /**
  * @type { ICommand }
@@ -29,7 +29,11 @@ module.exports = {
 
                 client.sendMessage(msg.from, { sticker: { url: buffer } }, { quoted: message }).catch(() => { return msg.reply('Terjadi kesalahan') })
             } else if (msg.quoted.message.stickerMessage.isAnimated) {
-                let url = await UploadFileUgu(file)
+                let media = 'database/src/shanndev.webp'
+                fs.writeFileSync(media, file)
+                let url = await UploadFileUgu(media)
+
+                fs.unlinkSync(media)
                 let res = await axios({ method: 'get', url: url.url, headers: { 'DNT': 1, 'Upgrade-Insecure-Request': 1, }, responseType: 'arraybuffer' })
 
                 let buffer = await writeExifVid(res.data, { packname: m1, author: m2 })
