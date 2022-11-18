@@ -7,6 +7,7 @@ const { Boom } = require('@hapi/boom')
 const { existsSync } = require('fs')
 const store = require('@store')
 const Pino = require('pino')
+const knex = require('@database/connection')
 
 existsSync('./store/baileys_store.json') && store.readFromFile('./store/baileys_store.json')
 setInterval(() => {
@@ -87,16 +88,78 @@ const connect = async () => {
     client.ev.on('group-participants.update', async (anu) => {
         try {
             let participants = anu.participants
+            let dbWelcome = await knex('welcome').where({ group_id: anu.id }).first()
+            if (!dbWelcome) await knex('welcome').insert({ group_id: anu.id })
+
+            let dbLeave = await knex('leave').where({ group_id: anu.id }).first()
+            if (!dbLeave) await knex('leave').insert({ group_id: anu.id })
 
             for (let num of participants) {
+                try {
+                    ppuser = await client.profilePictureUrl(num, 'image')
+                } catch {
+                    ppuser = 'https://i.ibb.co/yVhzrjj/20221029-131404.jpg'
+                }
+
+                // Get Profile Picture Group
+                try {
+                    ppgroup = await client.profilePictureUrl(anu.id, 'image')
+                } catch {
+                    ppgroup = 'https://i.ibb.co/yVhzrjj/20221029-131404.jpg'
+                }
+
                 if (anu.action == 'add') {
-                    client.sendMessage(anu.id, { text: `Silahkan baca deskripsi grup @${num.split("@")[0]}`, mentions: [num] })
+                    if (dbWelcome.type === 'text' && dbWelcome.type2 === 'tag') {
+                        client.sendMessage(anu.id, { text: dbWelcome.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
+                    } else if (dbWelcome.type === 'text' && dbWelcome.type2 !== 'tag') {
+                        client.sendMessage(anu.id, { text: dbWelcome.message })
+                    } else if (dbWelcome.type === 'image' && dbWelcome.type2 === 'tag') {
+                        client.sendMessage(anu.id, { image: { url: dbWelcome.media }, caption: dbWelcome.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
+                    } else if (dbWelcome.type === 'image' && dbWelcome.type2 !== 'tag') {
+                        client.sendMessage(anu.id, { image: { url: dbWelcome.media }, caption: dbWelcome.message })
+                    } else if (dbWelcome.type === 'video' && dbWelcome.type2 === 'tag') {
+                        client.sendMessage(anu.id, { video: { url: dbWelcome.media }, caption: dbWelcome.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
+                    } else if (dbWelcome.type === 'video' && dbWelcome.type2 !== 'tag') {
+                        client.sendMessage(anu.id, { video: { url: dbWelcome.media }, caption: dbWelcome.message })
+                    } else if (dbWelcome.type === 'ppuser' && dbWelcome.type2 === 'tag') {
+                        client.sendMessage(anu.id, { image: { url: ppuser }, caption: dbWelcome.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
+                    } else if (dbWelcome.type === 'ppuser' && dbWelcome.type2 !== 'tag') {
+                        client.sendMessage(anu.id, { image: { url: ppuser }, caption: dbWelcome.message })
+                    } else if (dbWelcome.type === 'ppgrup' && dbWelcome.type2 === 'tag') {
+                        client.sendMessage(anu.id, { image: { url: ppgroup }, caption: dbWelcome.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
+                    } else if (dbWelcome.type === 'ppgrup' && dbWelcome.type2 !== 'tag') {
+                        client.sendMessage(anu.id, { image: { url: ppgroup }, caption: dbWelcome.message })
+                    } else {
+                        client.sendMessage(anu.id, { text: 'Silahkan baca deskripsi grup member baru' })
+                    }
                 } else if (anu.action == 'remove') {
-                    client.sendMessage(anu.id, { text: `Goodbye @${num.split("@")[0]}`, mentions: [num] })
+                    if (dbLeave.type === 'text' && dbLeave.type2 === 'tag') {
+                        client.sendMessage(anu.id, { text: dbLeave.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
+                    } else if (dbLeave.type === 'text' && dbLeave.type2 !== 'tag') {
+                        client.sendMessage(anu.id, { text: dbLeave.message })
+                    } else if (dbLeave.type === 'image' && dbLeave.type2 === 'tag') {
+                        client.sendMessage(anu.id, { image: { url: dbLeave.media }, caption: dbLeave.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
+                    } else if (dbLeave.type === 'image' && dbLeave.type2 !== 'tag') {
+                        client.sendMessage(anu.id, { image: { url: dbLeave.media }, caption: dbLeave.message })
+                    } else if (dbLeave.type === 'video' && dbLeave.type2 === 'tag') {
+                        client.sendMessage(anu.id, { video: { url: dbLeave.media }, caption: dbLeave.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
+                    } else if (dbLeave.type === 'video' && dbLeave.type2 !== 'tag') {
+                        client.sendMessage(anu.id, { video: { url: dbLeave.media }, caption: dbLeave.message })
+                    } else if (dbLeave.type === 'ppuser' && dbLeave.type2 === 'tag') {
+                        client.sendMessage(anu.id, { image: { url: ppuser }, caption: dbLeave.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
+                    } else if (dbLeave.type === 'ppuser' && dbLeave.type2 !== 'tag') {
+                        client.sendMessage(anu.id, { image: { url: ppuser }, caption: dbLeave.message })
+                    } else if (dbLeave.type === 'ppgrup' && dbLeave.type2 === 'tag') {
+                        client.sendMessage(anu.id, { image: { url: ppgroup }, caption: dbLeave.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
+                    } else if (dbLeave.type === 'ppgrup' && dbLeave.type2 !== 'tag') {
+                        client.sendMessage(anu.id, { image: { url: ppgroup }, caption: dbLeave.message })
+                    } else {
+                        client.sendMessage(anu.id, { text: 'Goodbye seseorang' })
+                    }
                 }
             }
         } catch (err) {
-            logger.error('Group Participants Error')
+            logger.error(err)
         }
     })
 }

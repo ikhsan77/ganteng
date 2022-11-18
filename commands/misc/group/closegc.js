@@ -9,6 +9,6 @@ module.exports = {
     adminOnly: true,
     groupOnly: true,
     callback: async ({ msg, client }) => {
-        await client.groupSettingUpdate(m.chat, 'announcement').then((res) => msg.reply('done')).catch((err) => msg.reply('terjadi kesalahan, silahkan hubungi #creator'))
+        await client.groupSettingUpdate(msg.from, 'announcement').then((res) => msg.reply('done')).catch((err) => msg.reply('terjadi kesalahan, silahkan hubungi #creator'))
     },
 }
