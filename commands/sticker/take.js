@@ -1,7 +1,6 @@
 const { ICommand } = require('@libs/builders/command')
 const { writeExifImg, writeExifVid } = require('@libs/converter/exif')
 const i18n = require('i18n')
-const fs = require('fs')
 
 /**
  * @type { ICommand }
@@ -21,13 +20,15 @@ module.exports = {
             if (!m1) return msg.reply('*#xample:* #take Fajarara|@shannbot.ofc')
             if (!m2) return msg.reply('*#xample:* #take Fajarara|@shannbot.ofc')
 
-            await fs.writeFileSync('database/src/shanndev.webp', file)
+            if (!msg.quoted.message.stickerMessage.isAnimated) {
+                let buffer = await writeExifImg(file, { packname: m1, author: m2 })
+                if (!buffer) return msg.reply('Server dalam perbaikkan')
 
-            let buffer = await writeExifImg('database/src/shanndev.webp', { packname: m1, author: m2 })
-            if (!buffer) return msg.reply('Server dalam perbaikkan')
+                client.sendMessage(msg.from, { sticker: { url: buffer } }, { quoted: message })
+            } else if (msg.quoted.message.stickerMessage.isAnimated) {
+                msg.reply('Fitur sedang dalam perbaikkan')
+            }
 
-            await fs.unlinkSync('database/src/shanndev.webp')
-            client.sendMessage(msg.from, { sticker: { url: buffer } }, { quoted: message })
         } else return msg.reply(i18n.__('sticker.no_media'))
     },
 }
