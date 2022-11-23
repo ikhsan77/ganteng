@@ -93,7 +93,8 @@ module.exports = async (client, { messages, type }) => {
     }
 
     if (msg.isGroup) {
-        if (msg.body.match('https://chat.whatsapp.com/')) {
+        let thisLink = new RegExp('https://chat.whatsapp.com/', 'i')
+        if (thisLink.test(body)) {
             let antilink = await knex('antilink').where({ group_id: msg.from }).first()
             if (!antilink) await knex('antilink').insert({ group_id: msg.from })
 
@@ -116,20 +117,20 @@ module.exports = async (client, { messages, type }) => {
 
             if (config.ownerNumber.includes(msg.senderNumber) || isGcLink || msg.groupMetadata.participants.filter((v) => v.admin).map((v) => v.id).includes(msg.senderNumber + '@s.whatsapp.net')) return
             if (antilink.type === 'text' && antilink.status === 1) {
-                client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
-                return client.sendMessage(msg.from, { text: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+                client.sendMessage(msg.from, { text: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+                return client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
             } else if (antilink.type === 'image' && antilink.status === 1) {
-                client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
-                return client.sendMessage(msg.from, { image: { url: antilink.media }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+                client.sendMessage(msg.from, { image: { url: antilink.media }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+                return client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
             } else if (antilink.type === 'video' && antilink.status === 1) {
-                client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
-                return client.sendMessage(msg.from, { video: { url: antilink.media }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+                client.sendMessage(msg.from, { video: { url: antilink.media }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+                return client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
             } else if (antilink.type === 'ppuser' && antilink.status === 1) {
-                client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
-                return client.sendMessage(msg.from, { image: { url: ppuser }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+                client.sendMessage(msg.from, { image: { url: ppuser }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+                return client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
             } else if (antilink.type === 'ppgrup' && antilink.status === 1) {
-                client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
-                return client.sendMessage(msg.from, { image: { url: ppgroup }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+                client.sendMessage(msg.from, { image: { url: ppgroup }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+                return client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
             }
         }
     }
