@@ -42,8 +42,14 @@ module.exports = async (client, { messages, type }) => {
     if (userPrem) {
         if (userPrem.user_premium_end <= Date.now()) {
             await knex('users').where({ user_jid: userPrem.user_jid }).update('user_premium', false).then(async () => {
-                await knex('users').where({ user_jid: userPrem.user_jid }).update('user_premium_end', 0).then(() => {
-                    client.sendMessage(userPrem.user_jid + '@s.whatsapp.net', { text: '```Premium kamu sudah habis```' })
+                await knex('users').where({ user_jid: userPrem.user_jid }).update('user_premium_end', 0).then(async () => {
+                    await knex('users').where({ user_jid: userPrem.user_jid }).update('group_id', '-').then(async () => {
+                        await knex('users').where({ user_jid: userPrem.user_jid }).update('group_id2', '-').then(() => {
+                            client.groupLeave(userPrem.group_id)
+                            client.groupLeave(userPrem.group_id2)
+                            client.sendMessage(userPrem.user_jid + '@s.whatsapp.net', { text: '```Premium kamu sudah habis```' })
+                        })
+                    })
                 })
             })
         }
@@ -86,12 +92,55 @@ module.exports = async (client, { messages, type }) => {
         return
     }
 
+    if (msg.isGroup) {
+        if (msg.body.match('https://chat.whatsapp.com/')) {
+            let antilink = await knex('antilink').where({ group_id: msg.from }).first()
+            if (!antilink) await knex('antilink').insert({ group_id: msg.from })
+
+            try {
+                ppuser = await client.profilePictureUrl(msg.sender, 'image')
+            } catch {
+                ppuser = 'https://i.ibb.co/yVhzrjj/20221029-131404.jpg'
+            }
+
+            // Get Profile Picture Group
+            try {
+                ppgroup = await client.profilePictureUrl(msg.from, 'image')
+            } catch {
+                ppgroup = 'https://i.ibb.co/yVhzrjj/20221029-131404.jpg'
+            }
+
+            let gclink = (`https://chat.whatsapp.com/` + await client.groupInviteCode(msg.from))
+            let thisGcLink = new RegExp(gclink, 'i')
+            let isGcLink = thisGcLink.test(body)
+
+            if (config.ownerNumber.includes(msg.senderNumber) || isGcLink || msg.groupMetadata.participants.filter((v) => v.admin).map((v) => v.id).includes(msg.senderNumber + '@s.whatsapp.net')) return
+            if (antilink.type === 'text' && antilink.status === 1) {
+                client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
+                return client.sendMessage(msg.from, { text: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+            } else if (antilink.type === 'image' && antilink.status === 1) {
+                client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
+                return client.sendMessage(msg.from, { image: { url: antilink.media }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+            } else if (antilink.type === 'video' && antilink.status === 1) {
+                client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
+                return client.sendMessage(msg.from, { video: { url: antilink.media }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+            } else if (antilink.type === 'ppuser' && antilink.status === 1) {
+                client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
+                return client.sendMessage(msg.from, { image: { url: ppuser }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+            } else if (antilink.type === 'ppgrup' && antilink.status === 1) {
+                client.groupParticipantsUpdate(msg.from, [msg.sender], 'remove')
+                return client.sendMessage(msg.from, { image: { url: ppgroup }, caption: antilink.message.format({ user: '@' + msg.sender.split('@')[0] }), mentions: [msg.sender] })
+            }
+        }
+    }
+
     if (!isCommand) return
 
     const prefix = isCommand ? msg.body[0] : null
     const args = msg.body?.trim()?.split(/ +/)?.slice(1)
     const command = isCommand ? msg.body.slice(prefix.length).trim().split(/ +/).shift().toLowerCase() : msg.body
     const fullArgs = msg.body?.replace(command, '')?.slice(1)?.trim() || null
+
 
     /**
      * @type { ICommand }

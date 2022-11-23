@@ -9,9 +9,9 @@ exports.up = function (knex) {
                 table.bigIncrements('id')
                 table.string('group_id')
                 table.string('type').defaultTo('text')
-                table.string('type2').defaultTo('tag')
                 table.string('media').defaultTo('-')
                 table.string('message').defaultTo('Silahkan baca deskripsi grup {user}')
+                table.boolean('status').defaultTo(1)
             })
         }
     })

@@ -9,6 +9,8 @@ exports.up = function (knex) {
                 table.bigIncrements('user_id')
                 table.string('user_jid').unique()
                 table.string('user_language').defaultTo('id')
+                table.string('group_id').defaultTo('-')
+                table.string('group_id2').defaultTo('-')
                 table.bigInteger('user_limit').defaultTo(100)
                 table.bigInteger('user_exp').defaultTo(0)
                 table.bigInteger('user_level').defaultTo(1)

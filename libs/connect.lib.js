@@ -109,52 +109,28 @@ const connect = async () => {
                 }
 
                 if (anu.action == 'add') {
-                    if (dbWelcome.type === 'text' && dbWelcome.type2 === 'tag') {
+                    if (dbWelcome.type === 'text' && dbWelcome.status === 1) {
                         client.sendMessage(anu.id, { text: dbWelcome.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
-                    } else if (dbWelcome.type === 'text' && dbWelcome.type2 !== 'tag') {
-                        client.sendMessage(anu.id, { text: dbWelcome.message })
-                    } else if (dbWelcome.type === 'image' && dbWelcome.type2 === 'tag') {
+                    } else if (dbWelcome.type === 'image' && dbWelcome.status === 1) {
                         client.sendMessage(anu.id, { image: { url: dbWelcome.media }, caption: dbWelcome.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
-                    } else if (dbWelcome.type === 'image' && dbWelcome.type2 !== 'tag') {
-                        client.sendMessage(anu.id, { image: { url: dbWelcome.media }, caption: dbWelcome.message })
-                    } else if (dbWelcome.type === 'video' && dbWelcome.type2 === 'tag') {
+                    } else if (dbWelcome.type === 'video' && dbWelcome.status === 1) {
                         client.sendMessage(anu.id, { video: { url: dbWelcome.media }, caption: dbWelcome.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
-                    } else if (dbWelcome.type === 'video' && dbWelcome.type2 !== 'tag') {
-                        client.sendMessage(anu.id, { video: { url: dbWelcome.media }, caption: dbWelcome.message })
-                    } else if (dbWelcome.type === 'ppuser' && dbWelcome.type2 === 'tag') {
+                    } else if (dbWelcome.type === 'ppuser' && dbWelcome.status === 1) {
                         client.sendMessage(anu.id, { image: { url: ppuser }, caption: dbWelcome.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
-                    } else if (dbWelcome.type === 'ppuser' && dbWelcome.type2 !== 'tag') {
-                        client.sendMessage(anu.id, { image: { url: ppuser }, caption: dbWelcome.message })
-                    } else if (dbWelcome.type === 'ppgrup' && dbWelcome.type2 === 'tag') {
+                    } else if (dbWelcome.type === 'ppgrup' && dbWelcome.status === 1) {
                         client.sendMessage(anu.id, { image: { url: ppgroup }, caption: dbWelcome.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
-                    } else if (dbWelcome.type === 'ppgrup' && dbWelcome.type2 !== 'tag') {
-                        client.sendMessage(anu.id, { image: { url: ppgroup }, caption: dbWelcome.message })
-                    } else {
-                        client.sendMessage(anu.id, { text: 'Silahkan baca deskripsi grup member baru' })
                     }
                 } else if (anu.action == 'remove') {
-                    if (dbLeave.type === 'text' && dbLeave.type2 === 'tag') {
+                    if (dbLeave.type === 'text' && dbLeave.status === 1) {
                         client.sendMessage(anu.id, { text: dbLeave.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
-                    } else if (dbLeave.type === 'text' && dbLeave.type2 !== 'tag') {
-                        client.sendMessage(anu.id, { text: dbLeave.message })
-                    } else if (dbLeave.type === 'image' && dbLeave.type2 === 'tag') {
+                    } else if (dbLeave.type === 'image' && dbLeave.status === 1) {
                         client.sendMessage(anu.id, { image: { url: dbLeave.media }, caption: dbLeave.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
-                    } else if (dbLeave.type === 'image' && dbLeave.type2 !== 'tag') {
-                        client.sendMessage(anu.id, { image: { url: dbLeave.media }, caption: dbLeave.message })
-                    } else if (dbLeave.type === 'video' && dbLeave.type2 === 'tag') {
+                    } else if (dbLeave.type === 'video' && dbLeave.status === 1) {
                         client.sendMessage(anu.id, { video: { url: dbLeave.media }, caption: dbLeave.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
-                    } else if (dbLeave.type === 'video' && dbLeave.type2 !== 'tag') {
-                        client.sendMessage(anu.id, { video: { url: dbLeave.media }, caption: dbLeave.message })
-                    } else if (dbLeave.type === 'ppuser' && dbLeave.type2 === 'tag') {
+                    } else if (dbLeave.type === 'ppuser' && dbLeave.status === 1) {
                         client.sendMessage(anu.id, { image: { url: ppuser }, caption: dbLeave.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
-                    } else if (dbLeave.type === 'ppuser' && dbLeave.type2 !== 'tag') {
-                        client.sendMessage(anu.id, { image: { url: ppuser }, caption: dbLeave.message })
-                    } else if (dbLeave.type === 'ppgrup' && dbLeave.type2 === 'tag') {
+                    } else if (dbLeave.type === 'ppgrup' && dbLeave.status === 1) {
                         client.sendMessage(anu.id, { image: { url: ppgroup }, caption: dbLeave.message.format({ user: '@' + num.split('@')[0] }), mentions: [num] })
-                    } else if (dbLeave.type === 'ppgrup' && dbLeave.type2 !== 'tag') {
-                        client.sendMessage(anu.id, { image: { url: ppgroup }, caption: dbLeave.message })
-                    } else {
-                        client.sendMessage(anu.id, { text: 'Goodbye seseorang' })
                     }
                 }
             }
