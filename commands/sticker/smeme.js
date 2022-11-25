@@ -15,22 +15,23 @@ module.exports = {
     example: '{prefix}{command} Ayolo|Wkwk',
     callback: async ({ msg, client, message, fullArgs }) => {
         const file = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
-        if (!msg.typeCheck.isImage || !msg.typeCheck.isQuotedImage) return msg.reply('Send/Reply image dengan caption #smeme')
+        if (msg.typeCheck.isImage || msg.typeCheck.isQuotedImage) {
+            let [m1, m2] = fullArgs.split('|')
+            if (!m2) {
+                m1 = '-'
+                m2 = fullArgs
+            }
 
-        let [m1, m2] = fullArgs.split('|')
-        if (!m2) {
-            m1 = '-'
-            m2 = fullArgs
-        }
+            let mee = 'shannSmeme.jpg'
+            fs.writeFileSync(mee, file)
 
-        let mee = 'shannSmeme.jpg'
-        fs.writeFileSync(mee, file)
+            let mem = await TelegraPh(mee)
+            let smeme = `https://api.memegen.link/images/custom/${encodeURIComponent(m1)}/${encodeURIComponent(m2)}.png?background=${mem}`
 
-        let mem = await TelegraPh(mee)
-        let smeme = `https://api.memegen.link/images/custom/${encodeURIComponent(m1)}/${encodeURIComponent(m2)}.png?background=${mem}`
+            fs.unlinkSync(mee)
+            let buff = await writeExifImg(smeme, { packname: 'Fajarara', author: '@shannbot.ofc' })
+            await msg.replySticker({ url: buff }).catch(() => { return msg.reply('Terjadi kesalahan') })
+        } else return msg.reply('Send/Reply image dengan caption #smeme')
 
-        fs.unlinkSync(mee)
-        let buff = await writeExifImg(smeme, { packname: 'Fajarara', author: '@shannbot.ofc' })
-        await msg.replySticker({ url: buff }).catch(() => { return msg.reply('Terjadi kesalahan') })
     },
 }
