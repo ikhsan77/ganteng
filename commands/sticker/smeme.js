@@ -2,6 +2,7 @@ const { ICommand } = require('@libs/builders/command')
 const { writeExifImg } = require('@libs/converter/exif')
 const fs = require('fs')
 const { TelegraPh } = require('@libs/converter/upload')
+const axios = require('axios').default
 
 /**
  * @type { ICommand }
@@ -27,9 +28,10 @@ module.exports = {
 
             let mem = await TelegraPh(mee)
             let smeme = `https://api.memegen.link/images/custom/${encodeURIComponent(m1)}/${encodeURIComponent(m2)}.png?background=${mem}`
+            let { data } = await axios({ method: 'get', url: smeme, headers: { 'DNT': 1, 'Upgrade-Insecure-Request': 1 }, responseType: 'arraybuffer' })
 
             fs.unlinkSync(mee)
-            let buff = await writeExifImg(smeme, { packname: 'Fajarara', author: '@shannbot.ofc' })
+            let buff = await writeExifImg(data, { packname: 'Fajarara', author: '@shannbot.ofc' })
             await msg.replySticker({ url: buff }).catch(() => { return msg.reply('Terjadi kesalahan') })
         } else return msg.reply('Send/Reply image dengan caption #smeme')
 
