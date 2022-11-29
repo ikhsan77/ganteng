@@ -44,7 +44,8 @@ const jadibot = async (msg) => {
             const { lastDisconnect, connection, qr } = up
 
             if (qr) {
-                msg.replyImage(await qrcode.toDataURL(qr, { scale: 8 }), 'Please scanning QR Code to connect')
+                let gambar = await qrcode.toDataURL(qr, { scale: 8 })
+                msg.replyImage(gambar.replace('data:image/png;base64,', ''), 'Please scanning QR Code to connect')
             }
 
             if (connection) {
