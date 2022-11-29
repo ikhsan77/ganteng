@@ -7,6 +7,7 @@ const Pino = require('pino')
 const knex = require('@jadibot/database/connection')
 const qrcode = require('qrcode')
 const fs = require('fs')
+const { existsSync } = require('fs')
 const store = require('@store')
 
 existsSync('./store/baileys_stores.json') && store.readFromFile('./store/baileys_stores.json')
