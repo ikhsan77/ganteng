@@ -48,34 +48,20 @@ const jadibot = async (msg) => {
 
             if (connection === 'close') {
                 let reason = new Boom(lastDisconnect.error).output.statusCode
-                if (reason === DisconnectReason.badSession) {
-                    client.sendMessage(msg.sender, { text: 'Bad Session File, Please Scan Again' })
-                    fs.unlinkSync(`session/${msg.senderNumber}-session`)
-                    connects()
-                } else if (reason === DisconnectReason.connectionClosed) {
+                if (reason === DisconnectReason.connectionClosed) {
                     msg.reply('Connection closed, reconnecting....')
                     connects()
                 } else if (reason === DisconnectReason.connectionLost) {
+                    connects()
                     msg.reply('Connection Lost from Server, reconnecting...')
-                    connects()
-                } else if (reason === DisconnectReason.connectionReplaced) {
-                    client.sendMessage(msg.sender, { text: 'Bad Session File, Please Scan Again' })
-                    fs.unlinkSync(`session/${msg.senderNumber}-session`)
-                    connects()
-                } else if (reason === DisconnectReason.loggedOut) {
-                    client.sendMessage(msg.sender, { text: 'Device Logged Out, Please Scan Again.' })
-                    fs.unlinkSync(`session/${msg.senderNumber}-session`)
-                    connects()
                 } else if (reason === DisconnectReason.restartRequired) {
                     msg.reply('Restart Required, Restarting...')
                     connects()
                 } else if (reason === DisconnectReason.timedOut) {
+                    connects()
                     msg.reply('Connection TimedOut, Reconnecting...')
-                    connects()
                 } else {
-                    client.sendMessage(msg.sender, { text: 'Unknown DisconnectReason' })
-                    fs.unlinkSync(`session/${msg.senderNumber}-session`)
-                    connects()
+                    client.end()
                 }
             }
         })
