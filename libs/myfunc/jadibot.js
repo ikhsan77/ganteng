@@ -7,7 +7,12 @@ const Pino = require('pino')
 const knex = require('@jadibot/database/connection')
 const qrcode = require('qrcode')
 const fs = require('fs')
-const store = makeInMemoryStore({ logger: Pino().child({ level: 'silent', stream: 'store' }) })
+const store = require('@store')
+
+existsSync('./store/baileys_store.json') && store.readFromFile('./store/baileys_store.json')
+setInterval(() => {
+    store.writeToFile('./store/baileys_store.json')
+}, 60_000)
 
 const utility = new Utility()
 
