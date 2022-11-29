@@ -1,10 +1,10 @@
-const { default: WASocket, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason, makeInMemoryStore } = require('@adiwajshing/baileys')
-const { Utility } = require('@jadibot/libs/utils/utility')
-const logger = require('@jadibot/libs/utils/logger')
-const { messageHandler } = require('@jadibot/libs/handlers')
+const { default: WASocket, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason } = require('@adiwajshing/baileys')
+const { Utility } = require('@libs/utils/utility')
+const logger = require('@libs/utils/logger')
+const { messageHandler } = require('@libs/handlers')
 const { Boom } = require('@hapi/boom')
 const Pino = require('pino')
-const knex = require('@jadibot/database/connection')
+const knex = require('@database/connection')
 const qrcode = require('qrcode')
 const fs = require('fs')
 const { existsSync } = require('fs')
@@ -69,7 +69,7 @@ const jadibot = async (msg) => {
         // messages.upsert
         client.ev.on('messages.upsert', ({ messages, type }) => {
             if (type !== 'notify') return
-            messageHandler(client, { messages, type }, msg.senderNumber)
+            messageHandler(client, { messages, type })
         })
 
         client.ev.on('group-participants.update', async (anu) => {
