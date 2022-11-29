@@ -1,4 +1,4 @@
-const { default: WASocket, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason } = require('@adiwajshing/baileys')
+const { WAConnection, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason } = require('@adiwajshing/baileys')
 const { Utility } = require('@libs/utils/utility')
 const logger = require('@libs/utils/logger')
 const { messageHandler } = require('@libs/handlers')
@@ -16,37 +16,30 @@ setInterval(() => {
 
 const utility = new Utility()
 
-const jadibot = async (msg) => {
+const jadibot = async (msg, client) => {
     const connects = async () => {
         const { state, saveCreds } = await useMultiFileAuthState(`session/${msg.senderNumber}-session`)
         const { version, isLatest } = await fetchLatestBaileysVersion()
 
-        const client = WASocket({
-            auth: state,
-            logger: Pino({ level: 'silent' }),
-            browser: ['shanndev', 'Safari', '1.0'],
-            version,
+        conn = new WAConnection()
+        conn.logger.level = 'warn'
+        conn.version = [2, 2143, 3]
+        conn.browserDescription = ['shanndev', 'chrome', '1.0']
+        conn.on('qr', async qr => {
+            let gambar = await qrcode.toDataURL(qr, { scale: 8 })
+            let buffer = new Buffer.from(gambar.replace('data:image/png;base64,', ''), 'base64')
+            msg.replyImage(buffer, 'Please scanning QR Code to connect')
+
+            setTimeout(() => {
+                client.deleteMessage(msg.sender, gambar.key)
+            }, 25000)
         })
 
         store.bind(client.ev)
 
-        client.ev.on('chats.set', () => {
-            msg.reply(`Got ${store.chats.all().length} chats`)
-        })
-
-        client.ev.on('contacts.set', () => {
-            msg.reply(`Got ${Object.values(store.contacts).length} contacts`)
-        })
-
         client.ev.on('creds.update', saveCreds)
         client.ev.on('connection.update', async (up) => {
-            const { lastDisconnect, connection, qr } = up
-
-            if (qr) {
-                let gambar = await qrcode.toDataURL(qr, { scale: 8 })
-                let buffer = new Buffer.from(gambar.replace('data:image/png;base64,', ''), 'base64')
-                msg.replyImage(buffer, 'Please scanning QR Code to connect')
-            }
+            const { lastDisconnect, connection } = up
 
             if (connection) {
                 msg.reply(`Connection Status: ${connection}`)
@@ -103,7 +96,6 @@ const jadibot = async (msg) => {
                         ppuser = 'https://i.ibb.co/yVhzrjj/20221029-131404.jpg'
                     }
 
-                    // Get Profile Picture Group
                     try {
                         ppgroup = await client.profilePictureUrl(anu.id, 'image')
                     } catch {
