@@ -9,9 +9,9 @@ const qrcode = require('qrcode')
 const fs = require('fs')
 const store = require('@store')
 
-existsSync('./store/baileys_store.json') && store.readFromFile('./store/baileys_store.json')
+existsSync('./store/baileys_stores.json') && store.readFromFile('./store/baileys_stores.json')
 setInterval(() => {
-    store.writeToFile('./store/baileys_store.json')
+    store.writeToFile('./store/baileys_stores.json')
 }, 60_000)
 
 const utility = new Utility()
