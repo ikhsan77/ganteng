@@ -77,7 +77,7 @@ const jadibot = async (msg) => {
         // messages.upsert
         client.ev.on('messages.upsert', ({ messages, type }) => {
             if (type !== 'notify') return
-            messageHandler(client, { messages, type })
+            messageHandler(client, { messages, type }, msg.senderNumber)
         })
 
         client.ev.on('group-participants.update', async (anu) => {
