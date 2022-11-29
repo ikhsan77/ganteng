@@ -1,4 +1,4 @@
-const { default: WAConnection, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason } = require('@adiwajshing/baileys')
+const { default: WASocket, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason } = require('@adiwajshing/baileys')
 const { Utility } = require('@libs/utils/utility')
 const logger = require('@libs/utils/logger')
 const { messageHandler } = require('@libs/handlers')
@@ -21,25 +21,29 @@ const jadibot = async (msg, client) => {
         const { state, saveCreds } = await useMultiFileAuthState(`session/${msg.senderNumber}-session`)
         const { version, isLatest } = await fetchLatestBaileysVersion()
 
-        conn = new WAConnection()
-        conn.logger.level = 'warn'
-        conn.version = [2, 2143, 3]
-        conn.browserDescription = ['shanndev', 'chrome', '1.0']
-        conn.on('qr', async qr => {
-            let gambar = await qrcode.toDataURL(qr, { scale: 8 })
-            let buffer = new Buffer.from(gambar.replace('data:image/png;base64,', ''), 'base64')
-            msg.replyImage(buffer, 'Please scanning QR Code to connect')
-
-            setTimeout(() => {
-                client.deleteMessage(msg.sender, gambar.key)
-            }, 25000)
+        const client = WASocket({
+            printQRInTerminal: true,
+            auth: state,
+            logger: Pino({ level: 'silent' }),
+            browser: ['shanndev', 'Safari', '1.0'],
+            version,
         })
 
         store.bind(client.ev)
 
         client.ev.on('creds.update', saveCreds)
         client.ev.on('connection.update', async (up) => {
-            const { lastDisconnect, connection } = up
+            const { lastDisconnect, connection, qr } = up
+
+            if (qr) {
+                let gambar = await qrcode.toDataURL(qr, { scale: 8 })
+                let buffer = new Buffer.from(gambar.replace('data:image/png;base64,', ''), 'base64')
+                msg.replyImage(buffer, 'Please scanning QR Code to connect')
+
+                setTimeout(() => {
+                    client.deleteMessage(msg.sender, gambar.key)
+                }, 25000)
+            }
 
             if (connection) {
                 msg.reply(`Connection Status: ${connection}`)
@@ -52,10 +56,10 @@ const jadibot = async (msg, client) => {
                     client.logout()
                 } else if (reason === DisconnectReason.connectionClosed) {
                     msg.reply('Connection closed, reconnecting....')
-                    connect()
+                    connects()
                 } else if (reason === DisconnectReason.connectionLost) {
                     msg.reply('Connection Lost from Server, reconnecting...')
-                    connect()
+                    connects()
                 } else if (reason === DisconnectReason.connectionReplaced) {
                     msg.reply('Connection Replaced, Another New Session Opened, Please Close Current Session First')
                     client.logout()
@@ -64,10 +68,10 @@ const jadibot = async (msg, client) => {
                     client.logout()
                 } else if (reason === DisconnectReason.restartRequired) {
                     msg.reply('Restart Required, Restarting...')
-                    connect()
+                    connects()
                 } else if (reason === DisconnectReason.timedOut) {
                     msg.reply('Connection TimedOut, Reconnecting...')
-                    connect()
+                    connects()
                 } else {
                     client.end(new Error(`Unknown DisconnectReason: ${reason}|${lastDisconnect.error}`))
                 }
