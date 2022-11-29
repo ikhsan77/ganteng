@@ -58,7 +58,8 @@
         "@utils": "libs/utils",
         "@store": "store/index.js",
         "@config": "config/index.js",
-        "@database": "database"
+        "@database": "database",
+        "@jadibot": "jadibot"
     },
     "engines": {
         "node": ">=16.0.0"

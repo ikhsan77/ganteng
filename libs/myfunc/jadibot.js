@@ -1,22 +1,17 @@
-const { default: WASocket, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason } = require('@adiwajshing/baileys')
-const { Utility } = require('@libs/utils/utility')
-const logger = require('@libs/utils/logger')
-const { messageHandler } = require('@libs/handlers')
+const { default: WASocket, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason, makeInMemoryStore } = require('@adiwajshing/baileys')
+const { Utility } = require('@jadibot/libs/utils/utility')
+const logger = require('@jadibot/libs/utils/logger')
+const { messageHandler } = require('@jadibot/libs/handlers')
 const { Boom } = require('@hapi/boom')
-const { existsSync } = require('fs')
-const store = require('@store')
 const Pino = require('pino')
-const knex = require('@database/connection')
+const knex = require('@jadibot/database/connection')
 const qrcode = require('qrcode')
-
-existsSync('store/jadibot.json') && store.readFromFile('store/jadibot.json')
-setInterval(() => {
-    store.writeToFile('store/jadibot.json')
-}, 60_000)
+const fs = require('fs')
+const store = makeInMemoryStore({ logger: Pino().child({ level: 'silent', stream: 'store' }) })
 
 const utility = new Utility()
 
-const jadibot = async (msg, client) => {
+const jadibot = async (msg) => {
     const connects = async () => {
         const { state, saveCreds } = await useMultiFileAuthState(`session/${msg.senderNumber}-session`)
         const { version, isLatest } = await fetchLatestBaileysVersion()
@@ -39,10 +34,6 @@ const jadibot = async (msg, client) => {
                 let gambar = await qrcode.toDataURL(qr, { scale: 8 })
                 let buffer = new Buffer.from(gambar.replace('data:image/png;base64,', ''), 'base64')
                 msg.replyImage(buffer, 'Please scanning QR Code to connect')
-
-                setTimeout(() => {
-                    client.deleteMessage(msg.sender, gambar.key)
-                }, 25000)
             }
 
             if (connection) {
@@ -52,8 +43,9 @@ const jadibot = async (msg, client) => {
             if (connection === 'close') {
                 let reason = new Boom(lastDisconnect.error).output.statusCode
                 if (reason === DisconnectReason.badSession) {
-                    msg.reply(`Bad Session File, Please Delete ./session/${msg.senderNumber}-session and Scan Again`)
-                    client.logout()
+                    client.sendMessage(msg.sender, { text: 'Bad Session File, Please Scan Again' })
+                    fs.unlinkSync(`session/${msg.senderNumber}-session`)
+                    connects()
                 } else if (reason === DisconnectReason.connectionClosed) {
                     msg.reply('Connection closed, reconnecting....')
                     connects()
@@ -61,11 +53,13 @@ const jadibot = async (msg, client) => {
                     msg.reply('Connection Lost from Server, reconnecting...')
                     connects()
                 } else if (reason === DisconnectReason.connectionReplaced) {
-                    msg.reply('Connection Replaced, Another New Session Opened, Please Close Current Session First')
-                    client.logout()
+                    client.sendMessage(msg.sender, { text: 'Bad Session File, Please Scan Again' })
+                    fs.unlinkSync(`session/${msg.senderNumber}-session`)
+                    connects()
                 } else if (reason === DisconnectReason.loggedOut) {
-                    msg.reply(`Device Logged Out, Please Delete ./session/${msg.senderNumber}-session and Scan Again.`)
-                    client.logout()
+                    client.sendMessage(msg.sender, { text: 'Device Logged Out, Please Scan Again.' })
+                    fs.unlinkSync(`session/${msg.senderNumber}-session`)
+                    connects()
                 } else if (reason === DisconnectReason.restartRequired) {
                     msg.reply('Restart Required, Restarting...')
                     connects()
@@ -73,7 +67,9 @@ const jadibot = async (msg, client) => {
                     msg.reply('Connection TimedOut, Reconnecting...')
                     connects()
                 } else {
-                    client.end(new Error(`Unknown DisconnectReason: ${reason}|${lastDisconnect.error}`))
+                    client.sendMessage(msg.sender, { text: 'Unknown DisconnectReason' })
+                    fs.unlinkSync(`session/${msg.senderNumber}-session`)
+                    connects()
                 }
             }
         })

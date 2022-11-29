@@ -5,7 +5,9 @@ const { jadibot } = require('@libs/myfunc/jadibot')
  * @type { ICommand }
  */
 module.exports = {
-    aliases: ['ohayo'],
+    category: 'Premium',
+    description: 'Join group by link.',
+    privateOnly: true,
     premiumOnly: true,
     callback: async ({ msg, client }) => {
         await jadibot(msg, client)

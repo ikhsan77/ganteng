@@ -4,13 +4,30 @@
         "skipLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@libs/*": ["./libs/*"],
-            "@constants/*": ["./libs/constants/*"],
-            "@utils/*": ["./libs/utils/*"],
-            "@store": ["./store/index.js"],
-            "@config": ["./config/index.js"],
-            "@database/*": ["./database/*"]
+            "@libs/*": [
+                "./libs/*"
+            ],
+            "@constants/*": [
+                "./libs/constants/*"
+            ],
+            "@utils/*": [
+                "./libs/utils/*"
+            ],
+            "@store": [
+                "./store/index.js"
+            ],
+            "@config": [
+                "./config/index.js"
+            ],
+            "@database/*": [
+                "./database/*"
+            ],
+            "@jadibot/*": [
+                "./jadibot/*"
+            ]
         }
     },
-    "exclude": ["node_modules"]
+    "exclude": [
+        "node_modules"
+    ]
 }
