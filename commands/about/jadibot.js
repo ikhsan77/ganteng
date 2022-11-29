@@ -6,6 +6,7 @@ const { jadibot } = require('@libs/myfunc/jadibot')
  * @type { ICommand }
  */
 module.exports = {
+    aliases: ['ohayo'],
     callback: async ({ msg, message }) => {
         await jadibot(msg)
     }
