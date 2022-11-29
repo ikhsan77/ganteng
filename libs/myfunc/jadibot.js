@@ -61,6 +61,7 @@ const jadibot = async (msg) => {
                     connects()
                     msg.reply('Connection TimedOut, Reconnecting...')
                 } else {
+                    fs.unlinkSync(`session/${msg.senderNumber}-session`)
                     client.end()
                 }
             }
