@@ -1,4 +1,4 @@
-const { default: WASocket, fetchLatestBaileysVersion, useSingleFileAuthState, DisconnectReason } = require('@adiwajshing/baileys')
+const { default: WASocket, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason } = require('@adiwajshing/baileys')
 const { Utility } = require('@libs/utils/utility')
 const logger = require('@libs/utils/logger')
 const { messageHandler } = require('@libs/handlers')
@@ -19,7 +19,7 @@ const utility = new Utility()
 
 const jadibot = async (msg) => {
     const connects = async () => {
-        const { state, saveCreds } = await useSingleFileAuthState(`session/${msg.senderNumber}-session.json`)
+        const { state, saveCreds } = await useMultiFileAuthState(`session/${msg.senderNumber}-session`)
         const { version, isLatest } = await fetchLatestBaileysVersion()
 
         const client = WASocket({
@@ -61,7 +61,6 @@ const jadibot = async (msg) => {
                     connects()
                     msg.reply('Connection TimedOut, Reconnecting...')
                 } else {
-                    fs.unlinkSync(`session/${msg.senderNumber}-session.json`)
                     client.end()
                 }
             }
