@@ -22,7 +22,6 @@ const jadibot = async (msg) => {
         const { version, isLatest } = await fetchLatestBaileysVersion()
 
         const client = WASocket({
-            printQRInTerminal: true,
             auth: state,
             logger: Pino({ level: 'silent' }),
             browser: ['shanndev', 'Safari', '1.0'],
@@ -45,7 +44,7 @@ const jadibot = async (msg) => {
 
             if (qr) {
                 let gambar = await qrcode.toDataURL(qr, { scale: 8 })
-                let buffer = new Buffer.from(gambar.replace('data:image/png;base64,', ''))
+                let buffer = new Buffer.from(gambar.replace('data:image/png;base64,', ''), 'base64')
                 msg.replyImage(buffer, 'Please scanning QR Code to connect')
             }
 
