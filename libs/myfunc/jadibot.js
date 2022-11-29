@@ -17,7 +17,7 @@ setInterval(() => {
 const utility = new Utility()
 
 const jadibot = async (msg) => {
-    const connect = async () => {
+    const connects = async () => {
         const { state, saveCreds } = await useMultiFileAuthState(`session/${msg.senderNumber}-session`)
         const { version, isLatest } = await fetchLatestBaileysVersion()
 
@@ -141,7 +141,7 @@ const jadibot = async (msg) => {
         })
     }
 
-    connect()
+    connects()
 }
 
 module.exports = { jadibot }
