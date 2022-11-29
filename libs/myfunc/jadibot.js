@@ -1,4 +1,4 @@
-const { WAConnection, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason } = require('@adiwajshing/baileys')
+const { default: WAConnection, fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason } = require('@adiwajshing/baileys')
 const { Utility } = require('@libs/utils/utility')
 const logger = require('@libs/utils/logger')
 const { messageHandler } = require('@libs/handlers')
