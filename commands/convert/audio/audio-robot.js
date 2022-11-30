@@ -1,6 +1,7 @@
 const { ICommand } = require('@libs/builders/command')
 const { exec } = require('child_process')
 const fs = require('fs')
+const fileType = require('file-type')
 
 /**
  * @type { ICommand }
@@ -11,7 +12,8 @@ module.exports = {
     waitMessage: true,
     callback: async ({ msg, client, message }) => {
         let media = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
-        let path = 'shanndev.ogg'
+        let type = await fileType.fileTypeFromBuffer(media)
+        let path = `shanndev.${type.ext}`
         let path2 = 'shanndev.mp3'
         let set = '-filter_complex "afftfilt=real=\'hypot(re,im)*sin(0)\':imag=\'hypot(re,im)*cos(0)\':win_size=512:overlap=0.75"'
 

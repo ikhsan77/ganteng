@@ -1,6 +1,7 @@
 const { ICommand } = require('@libs/builders/command')
 const { exec } = require('child_process')
 const fs = require('fs')
+const fileType = require('file-type')
 
 /**
  * @type { ICommand }
@@ -11,9 +12,10 @@ module.exports = {
     waitMessage: true,
     callback: async ({ msg, client, message }) => {
         let media = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
-        let path = 'shanndev.ogg'
+        let type = await fileType.fileTypeFromBuffer(media)
+        let path = `shanndev.${type.ext}`
         let path2 = 'shanndev.mp3'
-        let set = '-af atempo=4/4,asetrate=44500*2/3'
+        let set = '-af volume=12'
 
         if (msg.typeCheck.isAudio || msg.typeCheck.isQuotedAudio) {
             fs.writeFileSync(path, media)
