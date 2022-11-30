@@ -60,11 +60,11 @@ module.exports = async (client, { messages, type }) => {
 
     if ((`family100-${msg.from}` in family100)) {
         let room = family100[`family100-${msg.from}`]
-        let teks = msg.body.toLowerCase().replace(/[^\w\s\-]+/, '')
+        let teks = msg.body.replace(/[^\w\s\-]+/, '')
         let isSurender = /^((me)?nyerah|surr?ender)$/i.test(msg.body)
 
         if (!isSurender) {
-            let index = room.jawaban.findIndex(v => v.toLowerCase().replace(/[^\w\s\-]+/, '') === teks)
+            let index = room.jawaban.findIndex(v => v.replace(/[^\w\s\-]+/, '') === teks)
 
             if (room.terjawab[index]) return !0
             room.terjawab[index] = msg.sender
