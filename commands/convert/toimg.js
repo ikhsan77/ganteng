@@ -1,5 +1,5 @@
 const { ICommand } = require('@libs/builders/command')
-const { exec, spawn, execSync } = require("child_process")
+const { exec } = require("child_process")
 const fs = require('fs')
 
 /**
