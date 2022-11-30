@@ -13,8 +13,7 @@ module.exports = {
     expectedArgs: '<username>',
     example: '{prefix}{command} shannbot.ofc',
     callback: async ({ msg, client, fullArgs }) => {
-        let { data } = await axios.get('https://api.lolhuman.xyz/api/github/{username}?apikey={apikey}'.format({ username: fullArgs, apikey })).catch(() => { return msg.reply('Server dalam perbaikkan') })
-        if (!data) return msg.reply('Server dalam perbaikkan')
+        let { data } = await axios.get('https://api.lolhuman.xyz/api/github/{username}?apikey={apikey}'.format({ username: fullArgs, apikey })).catch(() => { return msg.reply('username tidak ditemukan') })
         if (data.status !== 200) return msg.reply(data.message)
 
         let shannMsg = `[ *${data.result.name}* ]

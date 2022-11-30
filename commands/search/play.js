@@ -16,9 +16,7 @@ module.exports = {
     expectedArgs: '<query>',
     example: '{prefix}{command} melukis senja',
     callback: async ({ msg, client, fullArgs }) => {
-        const { data } = await x.get('https://api.lolhuman.xyz/api/ytplay?apikey={apikey}&query={query}'.format({ apikey: y.apikey, query: fullArgs })).catch(() => { return msg.reply('Server dalam perbaikkan') })
-
-        if (!data) return msg.reply('Server dalam perbaikkan')
+        const { data } = await x.get('https://api.lolhuman.xyz/api/ytplay?apikey={apikey}&query={query}'.format({ apikey: y.apikey, query: fullArgs })).catch(() => { return msg.reply('query tidak ditemukan') })
         if (data.status !== 200) return msg.reply('Query not found')
 
         let duration = shanMs(strnum.convertStringToNumber(data.result.info.duration.split(":")[0] + data.result.info.duration.split(":")[1] + data.result.info.duration.split(":")[2]) * 600, { long: true })

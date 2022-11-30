@@ -14,8 +14,7 @@ module.exports = {
     expectedArgs: '<link>',
     example: '{prefix}{command} https://www.instagram.com/xxxx',
     callback: async ({ msg, args }) => {
-        let { data } = await axios.get('https://api.lolhuman.xyz/api/instagram2?apikey={apikey}&url={url}'.format({ apikey, url: args[0] })).catch(() => { return msg.reply('server dalam perbaikkan') })
-        if (!data) return msg.reply('Server dalam perbaikkan')
+        let { data } = await axios.get('https://api.lolhuman.xyz/api/instagram2?apikey={apikey}&url={url}'.format({ apikey, url: args[0] })).catch(() => { return msg.reply('Link tidak valid') })
         if (data.status !== 200) return msg.reply('link tidak valid')
 
         for (var i of data.result.media) {
