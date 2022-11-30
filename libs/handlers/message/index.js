@@ -81,12 +81,10 @@ module.exports = async (client, { messages, type }) => {
 
     let userAnom = await knex('anonymous').where({ room_a: msg.from, status: 'chatting' }).first()
     let findAnom = await knex('anonymous').where({ room_b: msg.from, status: 'chatting' }).first()
-    if (msg.body !== msg.body[0] + 'skip' && msg.body !== msg.body[0] + 'next' && msg.body !== msg.body[0] + 'leave' && msg.body !== msg.body[0] + 'start') {
-        if (userAnom && !findAnom) {
-            if (userAnom.room_b !== 'kosong') await client.sendMessage(userAnom.room_b, { text: msg.body })
-        } else if (!userAnom && findAnom) {
-            await client.sendMessage(findAnom.room_a, { text: msg.body })
-        }
+    if (userAnom && !findAnom) {
+        if (userAnom.room_b !== 'kosong') await client.sendMessage(userAnom.room_b, { text: msg.body })
+    } else if (!userAnom && findAnom) {
+        await client.sendMessage(findAnom.room_a, { text: msg.body })
     }
 
     let userMenfess = await knex('menfess').where({ room_b: msg.senderNumber, status: true }).first()
