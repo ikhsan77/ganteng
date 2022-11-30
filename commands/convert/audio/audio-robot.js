@@ -20,7 +20,7 @@ module.exports = {
         if (msg.typeCheck.isAudio || msg.typeCheck.isQuotedAudio) {
             fs.writeFileSync(path, media)
 
-            exec(`ffmpeg ${path} ${set} ${path2}`, (err, stderr, stdout) => {
+            exec(`ffmpeg -i ${path} ${set} ${path2}`, (err, stderr, stdout) => {
                 fs.unlinkSync(path)
                 if (err) return console.log(err)
 
