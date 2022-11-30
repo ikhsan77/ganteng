@@ -11,7 +11,6 @@ module.exports = {
     aliases: ['removebackground'],
     category: 'Convert',
     description: 'Remove Background',
-    premiumOnly: true,
     waitMessage: true,
     callback: async ({ msg, client, message }) => {
         const image = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
