@@ -22,7 +22,7 @@ module.exports = {
 
             exec(`ffmpeg ${path} ${set} ${path2}`, (err, stderr, stdout) => {
                 fs.unlinkSync(path)
-                if (err) return msg.reply('server dalam perbaikkan')
+                if (err) return console.log(err)
 
                 let buff = fs.readFileSync(path2)
                 client.sendMessage(msg.from, { audio: buff, mimetype: 'audio/mpeg' }, { quoted: message }).then(() => { fs.unlinkSync(path2) }).catch(() => {
