@@ -12,7 +12,7 @@ module.exports = {
     waitMessage: true,
     callback: async ({ msg, client, message }) => {
         let media = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
-        let type = await fileType.fileTypeFromBuffer(media)
+        let type = await fileType.fromBuffer(media)
         let path = `shanndev.${type.ext}`
         let path2 = 'shanndev.mp3'
         let set = '-af acrusher=.1:1:64:0:log'
