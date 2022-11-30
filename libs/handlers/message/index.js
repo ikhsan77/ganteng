@@ -10,6 +10,9 @@ const config = require('@config')
 const chalk = require('chalk')
 const i18n = require('i18n')
 
+// Games
+let family100 = require('@database/db/game/family100.json')
+
 /**
  *
  * @param { WASocket } client
@@ -52,6 +55,27 @@ module.exports = async (client, { messages, type }) => {
                     })
                 })
             })
+        }
+    }
+
+    if ((`family100-${msg.from}` in family100)) {
+        let room = family100[`family100-${msg.from}`]
+        let teks = msg.body.toLowerCase().replace(/[^\w\s\-]+/, '')
+        let isSurender = /^((me)?nyerah|surr?ender)$/i.test(msg.body)
+
+        if (!isSurender) {
+            let index = room.jawaban.findIndex(v => v.toLowerCase().replace(/[^\w\s\-]+/, '') === teks)
+
+            if (room.terjawab[index]) return !0
+            room.terjawab[index] = msg.sender
+        }
+
+        let isWin = room.terjawab.length === room.terjawab.filter(v => v).length
+        let caption = `Jawablah Pertanyaan Berikut :\n${room.soal}\n\nTerdapat ${room.jawaban.length} Jawaban ${room.jawaban.find(v => v.includes(' ')) ? `(beberapa Jawaban Terdapat Spasi)` : ''}\n${isWin ? `Semua Jawaban Terjawab` : isSurender ? 'Menyerah!' : ''}\n${Array.from(room.jawaban, (jawaban, index) => { return isSurender || room.terjawab[index] ? `(${index + 1}) ${jawaban} ${room.terjawab[index] ? '@' + room.terjawab[index].split('@')[0] : ''}`.trim() : false }).filter(v => v).join('\n')}\n${isSurender ? '' : ``}`.trim()
+
+        client.sendMessage(msg.from, { text: caption, mentions: room.terjawab }, { quoted: message }).then(mes => { return family100[`family100-${msg.from}`].pesan = mes }).catch(_ => _)
+        if (isWin || isSurender) {
+            delete family100[`family100-${msg.from}`]
         }
     }
 
