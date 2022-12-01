@@ -21,15 +21,15 @@ module.exports = {
 
             fs.writeFileSync(path, media)
 
-            exec(`ffmpeg -i ${path} -af equalizer=f=54:width_type=o:width=2:g=20 ${path2}`, (err, stderr, stdout) => {
-                fs.unlinkSync(path)
-                if (err) return msg.reply('server dalam perbaikkan')
+            // exec(`ffmpeg -i ${path} -af equalizer=f=54:width_type=o:width=2:g=20 ${path2}`, (err, stderr, stdout) => {
+            //     fs.unlinkSync(path)
+            //     if (err) return msg.reply('server dalam perbaikkan')
 
-                let buff = fs.readFileSync(path2)
-                msg.replyAudio(buff)
+            //     let buff = fs.readFileSync(path2)
+            //     msg.replyAudio(buff)
 
-                fs.unlinkSync(path2)
-            })
+            //     fs.unlinkSync(path2)
+            // })
         } else return msg.reply('reply audio dengan caption #bass')
     }
 }
