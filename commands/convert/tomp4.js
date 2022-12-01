@@ -19,6 +19,6 @@ module.exports = {
 
             client.sendMessage(msg.from, { video: { url: result }, caption: '_Done by SHANNBot_' }, { quoted: message }).catch(() => { return msg.reply('Server dalam perbaikkan') })
             await fs.unlinkSync('database/src/shanndev.webp')
-        } else return msg.reply('Send/reply video dengan caption #tovn')
+        } else return msg.reply('Send/reply video dengan caption #tomp4')
     }
 }

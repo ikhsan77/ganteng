@@ -17,6 +17,8 @@ module.exports = {
         let path2 = 'shanndev.mp3'
         let set = '-filter:a "atempo=1.63,asetrate=44100"'
 
+        if (type.ext !== 'opus') return msg.reply('reply vn dengan caption ini')
+
         if (msg.typeCheck.isAudio || msg.typeCheck.isQuotedAudio) {
             fs.writeFileSync(path, media)
 

@@ -14,10 +14,10 @@ module.exports = {
         if (msg.typeCheck.isAudio || msg.typeCheck.isQuotedAudio) {
             let media = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
             let type = await fileType.fromBuffer(media)
+            let path = `shanndev.${type.ext}`
+            let path2 = 'shanndev.mp3'
 
-            let random = Math.floor(Math.random() * 9999999)
-            let path = random + '.' + type.ext
-            let path2 = random + '.mp3'
+            if (type.ext !== 'opus') return msg.reply('reply vn dengan caption ini')
 
             fs.writeFileSync(path, media)
 

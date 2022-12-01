@@ -25,6 +25,6 @@ module.exports = {
 
                 fs.unlinkSync('shanndev.png')
             })
-        } else return msg.reply('Send/reply video dengan caption #tovn')
+        } else return msg.reply('Send/reply video dengan caption #toimg')
     }
 }
