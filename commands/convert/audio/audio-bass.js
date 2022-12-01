@@ -21,7 +21,7 @@ module.exports = {
 
             fs.writeFileSync(path, media)
 
-            exec(`ffmpeg -i ${path} '-af equalizer=f=54:width_type=o:width=2:g=20' ${path2}`, (err, stderr, stdout) => {
+            exec(`ffmpeg -i ${path} -af equalizer=f=54:width_type=o:width=2:g=20 ${path2}`, (err, stderr, stdout) => {
                 fs.unlinkSync(path)
                 if (err) return msg.reply('server dalam perbaikkan')
 
