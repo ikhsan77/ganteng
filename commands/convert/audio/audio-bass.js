@@ -10,7 +10,7 @@ module.exports = {
     category: 'Convert',
     description: '-',
     waitMessage: true,
-    callback: async ({ msg, client, message }) => {
+    callback: async ({ msg }) => {
         if (msg.typeCheck.isAudio || msg.typeCheck.isQuotedAudio) {
             let media = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
             let type = await fileType.fromBuffer(media)
@@ -21,15 +21,16 @@ module.exports = {
 
             fs.writeFileSync(path, media)
 
-            // exec(`ffmpeg -i ${path} -af equalizer=f=54:width_type=o:width=2:g=20 ${path2}`, (err, stderr, stdout) => {
-            //     fs.unlinkSync(path)
-            //     if (err) return msg.reply('server dalam perbaikkan')
+            exec(`ffmpeg -i ${path} -af equalizer=f=54:width_type=o:width=2:g=20 ${path2}`, (err, stderr, stdout) => {
+                fs.unlinkSync(path)
 
-            //     let buff = fs.readFileSync(path2)
-            //     msg.replyAudio(buff)
+                if (err) return msg.reply('server dalam perbaikkan')
 
-            //     fs.unlinkSync(path2)
-            // })
+                let buff = fs.readFileSync(path2)
+                msg.replyAudio(buff)
+
+                fs.unlinkSync(path2)
+            })
         } else return msg.reply('reply audio dengan caption #bass')
     }
 }
