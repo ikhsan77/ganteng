@@ -8,7 +8,10 @@ module.exports = {
     category: 'Convert',
     description: 'Text to Audio',
     waitMessage: true,
-    callback: async ({ msg, client, message, fullArgs }) => {
+    minArgs: 1,
+    expectedArgs: '<email>',
+    example: '{prefix}{command} id|Hallo semuanya',
+    callback: async ({ msg, fullArgs }) => {
         let [m1, m2] = fullArgs.split('|')
         if (!m1) return msg.reply('*Example: #tts id|Hallo semuanya*')
         if (!m2) return msg.reply('*Example: #tts id|Hallo semuanya*')

@@ -25,10 +25,12 @@ module.exports = {
                 if (err) return msg.reply('server dalam perbaikkan')
 
                 let buff = fs.readFileSync(path2)
-                client.sendMessage(msg.from, { audio: buff, mimetype: 'audio/mpeg' }, { quoted: message }).then(() => { fs.unlinkSync(path2) }).catch(() => {
+                client.sendMessage(msg.from, { audio: buff, mimetype: 'audio/mpeg' }, { quoted: message }).catch(() => {
                     fs.unlinkSync(path2)
                     return msg.reply('terjadi kesalahan')
                 })
+
+                fs.unlinkSync(path2)
             })
         } else return msg.reply('reply audio dengan caption #bass')
     }
