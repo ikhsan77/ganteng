@@ -1,5 +1,6 @@
 const { ICommand } = require('@libs/builders/command')
-const xfarr = require('xfarr-api')
+const axios = require('axios').default
+const { apikey } = require('@config')
 
 /**
  * @type { ICommand }
@@ -13,10 +14,8 @@ module.exports = {
     expectedArgs: '<link>',
     example: '{prefix}{command} https://vt.tiktok.com/ZSwWCk5o/',
     callback: async ({ msg, args }) => {
-        const result = await xfarr.downloader.tiktok(args[0])
-        if (!result) return msg.reply('Server sedang dalam perbaikkan')
-        if (!result.media.length) return msg.reply('Link tidak valid')
+        let { data } = await axios.get('https://api.lolhuman.xyz/api/tiktok?apikey={apikey}&url={url}'.format({ apikey, url: args[0] })).catch(() => { return msg.reply('link tidak valid') })
 
-        msg.replyVideo({ url: (result.media[1] ? result.media[1].url : '') }, `Download from ${args[0]}`).catch(() => { return msg.reply('Terjadi kesalahan saat mengirim media') })
+        msg.replyVideo({ url: (data.result.link ? data.result.link : '') }, `Download from ${args[0]}`).catch(() => { return msg.reply('Terjadi kesalahan saat mengirim media') })
     },
 }
