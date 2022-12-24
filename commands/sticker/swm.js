@@ -8,7 +8,6 @@ const i18n = require('i18n')
 module.exports = {
     category: 'Sticker',
     description: 'Sticker Maker',
-    premiumOnly: true,
     minArgs: 1,
     expectedArgs: '<pack>|<author>',
     example: '{prefix}{command} Fajarara|@shannbot.ofc',
