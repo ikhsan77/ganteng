@@ -1,6 +1,7 @@
 const { ICommand } = require('@libs/builders/command')
 const x = require('axios').default
 const { TelegraPh } = require('@libs/converter/upload')
+const fs = require('fs')
 
 /**
  * @type { ICommand }
