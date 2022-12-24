@@ -2,6 +2,7 @@ const { ICommand } = require('@libs/builders/command')
 const x = require('axios').default
 const { TelegraPh } = require('@libs/converter/upload')
 const fs = require('fs')
+const { apikey } = require('@config')
 
 /**
  * @type { ICommand }
