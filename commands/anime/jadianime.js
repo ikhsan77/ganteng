@@ -19,9 +19,7 @@ module.exports = {
 
             let buffer = await TelegraPh(media)
             if (!buffer) return msg.reply('Server dalam perbaikkan')
-
-            let { data } = await axios.get('https://api.lolhuman.xyz/api/imagetoanime?apikey={apikey}&img={buffer}'.format({ apikey, buffer })).catch(() => { return msg.reply('Server dalam perbaikkan') })
-            msg.replyImage(data).catch(() => { return msg.reply('gabisa') })
+            msg.replyImage({ url: 'https://api.lolhuman.xyz/api/imagetoanime?apikey={apikey}&img={buffer}'.format({ apikey, buffer }) }, 'awikwok').catch(() => { return msg.reply('gabisa') })
         }
     },
 }
