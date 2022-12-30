@@ -17,12 +17,12 @@ module.exports = {
         let { data } = await axios.get('https://api.lolhuman.xyz/api/instagram?apikey={apikey}&url={url}'.format({ apikey, url: args[0] })).catch(() => { return msg.reply('Link tidak valid') })
         if (data.status !== 200) return msg.reply('link tidak valid')
 
-        for (var i of data.result.media) {
+        for (var i of data.result) {
             let res = await axios.head(i)
             let mime = res.headers['content-type']
 
-            if (/image/.test(mime)) msg.replyImage({ url: i }, data.result.caption).catch(() => { return msg.reply('Link tidak valid') })
-            else if (/video/.test(mime)) msg.replyVideo({ url: i }, data.result.caption).catch(() => { return msg.reply('Link tidak valid') })
+            if (/image/.test(mime)) msg.replyImage({ url: i }, 'done').catch(() => { return msg.reply('Link tidak valid') })
+            else if (/video/.test(mime)) msg.replyVideo({ url: i }, 'done').catch(() => { return msg.reply('Link tidak valid') })
             else msg.reply('Link tidak valid')
         }
     },
